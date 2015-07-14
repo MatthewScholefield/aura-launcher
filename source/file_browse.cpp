@@ -34,7 +34,7 @@
 
 #define SCREEN_COLS 32
 #define ENTRIES_PER_SCREEN 22
-#define ENTRIES_START_ROW 2
+#define ENTRIES_START_ROW 3
 #define ENTRY_PAGE_LENGTH 10
 
 using namespace std;
@@ -113,7 +113,8 @@ void showDirectoryContents (const vector<DirEntry>& dirContents, int startRow) {
 	getcwd(path, PATH_MAX);
 	
 	// Clear the screen
-	iprintf ("\x1b[2J");
+	iprintf("\x1b[2J");
+	iprintf("\x1b[1;2H");
 	
 	// Print the path
 	if (strlen(path) < SCREEN_COLS) {
@@ -123,9 +124,9 @@ void showDirectoryContents (const vector<DirEntry>& dirContents, int startRow) {
 	}
 	
 	// Move to 2nd row
-	iprintf ("\x1b[1;0H");
+	iprintf("\x1b[2;1H");
 	// Print line of dashes
-	iprintf ("--------------------------------");
+	iprintf("------------------------------ ");
 	
 	// Print directory listing
 	for (int i = 0; i < ((int)dirContents.size() - startRow) && i < ENTRIES_PER_SCREEN; i++) {
@@ -133,7 +134,7 @@ void showDirectoryContents (const vector<DirEntry>& dirContents, int startRow) {
 		char entryName[SCREEN_COLS + 1];
 		
 		// Set row
-		iprintf ("\x1b[%d;0H", i + ENTRIES_START_ROW);
+		iprintf("\x1b[%d;1H", i + ENTRIES_START_ROW);
 		
 		if (entry->isDirectory) {
 			strncpy (entryName, entry->name.c_str(), SCREEN_COLS);
@@ -159,10 +160,10 @@ string browseForFile (const vector<string> extensionList) {
 	while (true) {
 		// Clear old cursors
 		for (int i = ENTRIES_START_ROW; i < ENTRIES_PER_SCREEN + ENTRIES_START_ROW; i++) {
-			iprintf ("\x1b[%d;0H ", i);
+			iprintf ("\x1b[%d;1H ", i);
 		}
 		// Show cursor
-		iprintf ("\x1b[%d;0H*", fileOffset - screenOffset + ENTRIES_START_ROW);
+		iprintf ("\x1b[%d;1H\x10", fileOffset - screenOffset + ENTRIES_START_ROW);
 
 		iconTitleUpdate (dirContents.at(fileOffset).isDirectory,dirContents.at(fileOffset).name.c_str());
 
