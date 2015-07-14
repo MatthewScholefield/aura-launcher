@@ -1,5 +1,6 @@
 # About
 Aura Launcher is an aesthetically pleasing homebrew launcher based off of DevkitPro's hbmenu which can be used to replace the menu on several DS flashcards. Read more about the core of the launcher [on the hbmenu page][hbmenu].
+![Screenshot][Top Screen]
 
 # Installation
 To try out the launcher, place `Aura-Launcher.nds` in the root of your card and start it as you would any other homebrew. To replace it as your default launcher, copy the contents of the install folder to the root of your SD card (Overwriting duplicate files).
@@ -20,3 +21,4 @@ Many R4i knockoffs are also supported (Such as R4i SDHC and Gold) thanks to finc
  
 [hbmenu]:https://github.com/devkitPro/nds-hb-menu
 [fincs' blog page]:http://fincs.drunkencoders.com/2010/04/13/r4i-christmas-hbmenu-bootstub/
+[Top Screen]:https://cloud.githubusercontent.com/assets/5875019/8685470/6dcbc466-2a44-11e5-92af-256503349dbb.png
