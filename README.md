@@ -1,5 +1,6 @@
 # About
 Aura Launcher is an aesthetically pleasing homebrew launcher based off of DevkitPro's hbmenu which can be used to replace the menu on several DS flashcards. Read more about the core of the launcher [on the hbmenu page][hbmenu].
+
 ![Screenshot][Top Screen]
 
 # Installation
