@@ -110,8 +110,12 @@ int main(int argc, char **argv) {
 
 	while(1) {
 
+		//Navigates to the file to launch
 		filename = browseForFile(extensionList);
 
+		////////////////////////////////////
+		// Launch the item
+		
 		// Construct a command line
 		getcwd (filePath, PATH_MAX);
 		pathLen = strlen (filePath);
