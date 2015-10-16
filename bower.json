@@ -1,0 +1,25 @@
+{
+  "name": "Aura-Launcher",
+  "version": "0.5.0",
+  "homepage": "https://github.com/Wolfgange3311999/Aura-Launcher",
+  "authors": [
+    "Wolfgange3311999 <matthew3311999@gmail.com>"
+  ],
+  "description": "A themed homebrew launcher for the DS",
+  "main": "index.html",
+  "keywords": [
+    "Examples"
+  ],
+  "license": "GPL-3.0",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "~3.3.5"
+  }
+}

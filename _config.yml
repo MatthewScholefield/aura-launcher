@@ -1,0 +1,22 @@
+# Site settings
+title: Aura Launcher
+email: matthew3311999@gmail.com
+description: > # this means to ignore newlines until "baseurl:"
+  Aura Launcher, a themed homebrew launcher for the DS
+baseurl: "/Aura-Launcher" # the subpath of your site, e.g. /blog/
+url: "http://wolfgange3311999.github.io" # the base hostname & protocol for your site
+github_username:  wolfgange3311999
+
+include:
+  - .nojekyll
+
+exclude:
+  - "Rakefile"
+  - "Gruntfile.coffee"
+  - "node_modules"
+  - "package.json"
+  - "bower_components"
+  - "bower.json"
+
+# Build settings
+markdown: kramdown
