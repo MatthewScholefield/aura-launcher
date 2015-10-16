@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>Aura Launcher</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+	<!--Let browser know website is optimized for mobile-->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+	<!--Import Google Icon Font-->
+	<link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+	<!--Import materialize.css-->
+	<link href="vendor/css/style.css" type="text/css" rel="stylesheet" media="screen,projection" />
+	<link href="vendor/css/materialize.min.css" type="text/css" rel="stylesheet" media="screen,projection" />
+</head>
+
+<body>
+
+	<!--Navbar-->
+	<div class="navbar-fixed">
+		<nav class="blue darken-1" role="navigation">
+			<div class="nav-wrapper container">
+				<a id="logo-container" href="index.html" class="brand-logo">Aura Launcher</a>
+				<ul class="right hide-on-med-and-down">
+					<li class="waves-effect waves-light">
+						<a href="download.html">Download</a>
+					</li>
+					<li class="waves-effect waves-light">
+						<a href="https://github.com/Wolfgange3311999/Aura-Launcher">GitHub</a>
+					</li>
+				</ul>
+				<ul id="nav-mobile" class="side-nav">
+					<li>
+						<a href="download.html">Download</a>
+					</li>
+					<li>
+						<a href="https://github.com/Wolfgange3311999/Aura-Launcher">GitHub</a>
+					</li>
+				</ul>
+				<a href="#" data-activates="nav-mobile" class="button-collapse">
+					<i class="material-icons">menu</i>
+				</a>
+			</div>
+		</nav>
+	</div>
+
+	<!--Main Content-->
+	<div class="section no-pad-bot" id="index-banner">
+		<div class="container">
+			<h1 class="header center red-text text-darken-3">Aura Launcher</h1>
+			<div class="row center">
+				<h5 class="header col s12 light black-text">A themed NDS Homebrew launcher</h5>
+			</div>
+			<div class="row center">
+				<a href="download.html" id="download-button" class="btn-large waves-effect waves-light red darken-3">Download</a>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col l4 s12">
+			<div class="card small">
+				<div class="card-image waves-effect waves-block waves-light">
+					<img class="activator" src="images/screenshot.png">
+				</div>
+				<div class="card-content">
+					<span class="card-title activator grey-text text-darken-4">Design<i class="material-icons right">more_vert</i></span>
+					<p><a href="#">More information</a></p>
+				</div>
+				<div class="card-reveal">
+					<span class="card-title grey-text text-darken-4">Design<i class="material-icons right">close</i></span>
+					<p>Aura Launcher features finely crafted graphics unmatched in any other launcher.</p>
+				</div>
+			</div>
+		</div>
+
+		<div class="col l4 s12">
+			<div class="card small">
+				<div class="card-image waves-effect waves-block waves-light">
+					<img class="activator" src="images/bottom.png">
+				</div>
+				<div class="card-content">
+					<span class="card-title activator grey-text text-darken-4">Functionality<i class="material-icons right">more_vert</i></span>
+					<p><a href="#">More information</a></p>
+				</div>
+				<div class="card-reveal">
+					<span class="card-title grey-text text-darken-4">Functionality<i class="material-icons right">close</i></span>
+					<p>Based on hbmenu, Aura Launcher is one of the most widely supported launchers. It's set up for easy user interaction.</p>
+				</div>
+			</div>
+		</div>
+
+		<div class="col l4 s12">
+			<div class="card small">
+				<div class="card-image waves-effect waves-block waves-light">
+					<img class="activator" src="images/screenshot.png">
+				</div>
+				<div class="card-content">
+					<span class="card-title activator grey-text text-darken-4">Speed<i class="material-icons right">more_vert</i></span>
+					<p><a href="#">More information</a></p>
+				</div>
+				<div class="card-reveal">
+					<span class="card-title grey-text text-darken-4">Speed<i class="material-icons right">close</i></span>
+					<p>Loading times are instantaneous (Thanks to hbmenu) and Animations are incredibly fluid.</p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!--Footer-->
+	<footer class="page-footer red darken-3">
+		<div class="container">
+			<div class="row">
+				<div class="col l9 s12">
+					<h5 class="white-text">The team</h5>
+					<p class="grey-text text-lighten-4 default">Currently <a class="white-text" href="https://github.com/Wolfgange3311999">Matthew Scholefield</a> is the only developer working on Aura Launcher. Hbmenu was created by Wintermute. Any contributions are greatky appreciated.</p>
+				</div>
+				<div class="col l3 s12">
+					<h5 class="white-text">Support</h5>
+					<ul>
+						<li>
+							<a class="white-text" href="http://gbatemp.net/threads/aura-launcher.392792/">GBATemp</a>
+						</li>
+						<li>
+							<a class="white-text" href="mailto://matthew3311999@gmail.com">Email</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="footer-copyright">
+			<div class="container">
+				Made by
+				<a class="orange-text text-lighten-3" href="https://github.com/Wolfgange3311999">Matthew Scholefield</a>
+			</div>
+		</div>
+	</footer>
+
+	<!--Scripts-->
+	<script type="text/javascript" src="vendor/js/jquery.min.js"></script>
+	<script type="text/javascript" src="vendor/js/materialize.min.js"></script>
+	<script src="vendor/js/init.js"></script>
+
+	<!--Mobile Sidebar Target-->
+	<div class="hiddendiv common"></div>
+	<div class="drag-target" style="touch-action: pan-y; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0); left: 0px;"></div>
+</body>
+
+</html>
