@@ -28,14 +28,14 @@
 #include <string.h>
 #include <unistd.h>
 
+#include "graphics/graphics.h"
+
 #include "nds_loader_arm9.h"
 #include "file_browse.h"
 
 #include "hbmenu_banner.h"
 
 #include "iconTitle.h"
-#include "font.h"
-#include "sub_bg.h"
 
 using namespace std;
 
@@ -63,39 +63,8 @@ int main(int argc, char **argv) {
 	std::string filename;
 
 	iconTitleInit();
-
-	// Subscreen as a console
-
-	videoSetModeSub(MODE_5_2D | DISPLAY_BG_EXT_PALETTE);
-	vramSetBankC(VRAM_C_SUB_BG);
-	int subBgID = bgInitSub(2, BgType_ExRotation, BgSize_ER_512x512, 10, 2);
-	bgWrapOn(subBgID);
-	vramSetBankH(VRAM_H_LCD);
-	dmaCopy(sub_bgPal, VRAM_H_EXT_PALETTE[2][0], sub_bgPalLen);
-	vramSetBankH(VRAM_H_SUB_BG_EXT_PALETTE);
-	dmaCopy(sub_bgTiles, bgGetGfxPtr(subBgID), sub_bgTilesLen);
-
-	//ideoSetModeSub(MODE_0_2D);
-	//vramSetBankH(VRAM_H_SUB_BG);
-	PrintConsole *console = consoleInit(NULL, 0, BgType_Text8bpp, BgSize_T_512x256, 8, 0, false, false);
-	ConsoleFont font;
-	font.gfx = (u16*) fontTiles;
-	font.pal = (u16*) fontPal;
-	font.numChars = 256;
-	font.numColors = fontPalLen / 2;
-	font.bpp = 8;
-	font.asciiOffset = 0;
-	font.convertSingleColor = false;
-	consoleSetFont(console, &font);
-	vramSetBankH(VRAM_H_LCD);
-	dmaCopy(&fontPal, VRAM_H_EXT_PALETTE[0][0], fontPalLen); //Copy the palette
-	vramSetBankH(VRAM_H_SUB_BG_EXT_PALETTE);
-	dmaCopy(&fontTiles, (uint16*) 0x0620400, fontTilesLen);
-	uint16 *bgptr = bgGetMapPtr(subBgID);
-
-	for (int i = 0; i < 32; ++i)
-		for (int j = 0; j < 24; ++j)
-			bgptr[i + j * 64] = i + j * 32;
+	graphicsInit();
+	fontInit();
 
 	if (!fatInitDefault()) {
 		iprintf ("fatinitDefault failed!\n");

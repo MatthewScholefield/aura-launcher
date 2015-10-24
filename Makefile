@@ -25,7 +25,7 @@ VERSION	:=	$(HBMENU_MAJOR).$(HBMENU_MINOR).$(HBMENU_PATCH)
 #---------------------------------------------------------------------------------
 TARGET		:=	Aura-Launcher
 BUILD		:=	build
-SOURCES		:=	source
+SOURCES		:=	source source/graphics
 INCLUDES	:=	include
 DATA		:=	data  
 GRAPHICS	:=  gfx
