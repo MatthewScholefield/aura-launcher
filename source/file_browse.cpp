@@ -78,6 +78,11 @@ void getDirectoryContents (vector<DirEntry>& dirContents, const vector<string> e
 	string vowels = "aeiou";
 	string consonants = "bcdfghjklmnpqrstvwxyz";
 
+	DirEntry first;
+	first.name = "AAA First";
+	first.isDirectory = true;
+	dirContents.push_back(first);
+
 	for (int i = 0; i < rand() % 30 + 25; ++i)
 	{
 		ostringstream fileName;
@@ -93,6 +98,10 @@ void getDirectoryContents (vector<DirEntry>& dirContents, const vector<string> e
 		dirEntry.name = tmp.c_str();
 		dirContents.push_back(dirEntry);
 	}
+	DirEntry last;
+	last.name = "ZZZ Last";
+	last.isDirectory = false;
+	dirContents.push_back(last);
 
 #else
 
