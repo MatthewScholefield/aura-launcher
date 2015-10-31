@@ -1,9 +1,27 @@
-*.DAT
-*.NDS
-*.nds
-*.elf
-*.bin
-*.bz2
+*/*/*/*/*.*
+*/*/*/*.*
+*/*/*.*
+*/*.*
+*.*
+
+# Source Files
+!/**/*.cpp
+!/**/*.h
+
+# Graphics Files
+!/**/*.png
+!/**/*.grit
+
+# Audio Files
+!/**/*.wav
+!/**/*.it
+
+# Other Files
+!README.md
+!icon.bmp
+!Makefile
+
+# Folders
 bootloader/build
 BootStrap/arm7/build
 BootStrap/arm9/build
