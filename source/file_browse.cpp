@@ -24,7 +24,8 @@
 #include <vector>
 #include <algorithm>
 #include <unistd.h>
-#include <string.h>
+#include <string>
+#include <sstream>
 #include <stdio.h>
 #include <dirent.h>
 
@@ -69,10 +70,33 @@ bool dirEntryPredicate (const DirEntry& lhs, const DirEntry& rhs) {
 }
 
 void getDirectoryContents (vector<DirEntry>& dirContents, const vector<string> extensionList) {
-	struct stat st;
 
 	dirContents.clear();
 
+#ifdef EMULATE_FILES
+	
+	string vowels = "aeiou";
+	string consonants = "bcdfghjklmnpqrstvwxyz";
+
+	for (int i = 0; i < rand() % 30 + 25; ++i)
+	{
+		ostringstream fileName;
+		DirEntry dirEntry;
+		if ((dirEntry.isDirectory = (rand() % 2)))
+			fileName << "Directory ";
+		else
+			fileName << "File ";
+		for (int j = 0; j < rand() % 15 + 4; ++j)
+			fileName << (j % 2 == 0 ? consonants[rand() % consonants.size()]
+				: vowels[rand() % vowels.size()]);
+		string tmp = fileName.str();
+		dirEntry.name = tmp.c_str();
+		dirContents.push_back(dirEntry);
+	}
+
+#else
+
+	struct stat st;
 	DIR *pdir = opendir ("."); 
 	
 	if (pdir == NULL) {
@@ -96,7 +120,9 @@ void getDirectoryContents (vector<DirEntry>& dirContents, const vector<string> e
 		}
 		
 		closedir(pdir);
-	}	
+	}
+
+#endif
 	
 	sort(dirContents.begin(), dirContents.end(), dirEntryPredicate);
 }

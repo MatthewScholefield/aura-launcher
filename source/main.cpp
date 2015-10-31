@@ -66,16 +66,21 @@ int main(int argc, char **argv) {
 	graphicsInit();
 	fontInit();
 
+#ifndef EMULATE_FILES
+
 	if (!fatInitDefault()) {
 		iprintf ("fatinitDefault failed!\n");
 		stop();
 	}
 
+#endif
+	
 	keysSetRepeat(25,5);
 
 	vector<string> extensionList;
 	extensionList.push_back(".nds");
 	extensionList.push_back(".argv");
+	srand(time(NULL));
 
 	while(1) {
 
