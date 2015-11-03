@@ -27,6 +27,7 @@
 
 #include <string.h>
 #include <unistd.h>
+#include <gl2d.h>
 
 #include "graphics/graphics.h"
 
@@ -62,8 +63,21 @@ int main(int argc, char **argv) {
 	int pathLen;
 	std::string filename;
 
-	iconTitleInit();
 	graphicsInit();
+	/*while (1)
+	{
+		//swiWaitForVBlank();
+		while (REG_DISPCAPCNT & DCAP_ENABLE);
+		startRendering(true);
+		glBegin2D();
+		{
+			glBoxFilledGradient(0, 0, 255, 191, RGB15(25, 0, 0), RGB15(23, 20, 0), RGB15(25, 0, 0), RGB15(23, 20, 0));
+			drawIcon();
+		}
+		glEnd2D();
+		glFlush(0);
+		swiWaitForVBlank();
+	}*/
 	fontInit();
 
 #ifndef EMULATE_FILES
