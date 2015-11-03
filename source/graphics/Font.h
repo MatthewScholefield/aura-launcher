@@ -1,10 +1,25 @@
+/******************************************************************************
+ *******************************************************************************
+	A simple font class for Easy GL2D DS created by:
+
+	Relminator (Richard Eric M. Lope BSN RN)
+	Http://Rel.Phatcode.Net
+
+ *******************************************************************************
+ ******************************************************************************/
+
 #pragma once
 
-class Cglfont
+class Font
 {
+private:
+	glImage *font_sprite;
+	char str[256];
+	char str2[256];
+	
 public:
 
-	Cglfont();
+	Font() { };
 	int Load(glImage *_font_sprite,
 			const unsigned int numframes,
 			const unsigned int *texcoords,
@@ -20,10 +35,4 @@ public:
 	void Print(int x, int y, int value);
 	void PrintCentered(int x, int y, const char *text);
 	void PrintCentered(int x, int y, int value);
-
-
-private:
-	glImage *font_sprite;
-	char str[256];
-	char str2[256];
 };

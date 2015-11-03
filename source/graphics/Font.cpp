@@ -1,32 +1,19 @@
 /******************************************************************************
  *******************************************************************************
-	Easy GL2D
-	Fonts example
-	A simple font class for Easy GL2D DS
+	A simple font class for Easy GL2D DS created by:
 
 	Relminator (Richard Eric M. Lope BSN RN)
 	Http://Rel.Phatcode.Net
 
-	Thanks to:
-	Adigun A. Polack for the fonts
-
  *******************************************************************************
  ******************************************************************************/
-
 
 #include <nds.h>
 #include <stdio.h>
 #include <gl2d.h>
 #include "Font.h"
 
-Cglfont::Cglfont() { }
-
-/******************************************************************************
-
-	Loads our font
-
- ******************************************************************************/
-int Cglfont::Load(glImage *_font_sprite,
+int Font::Load(glImage *_font_sprite,
 				  const unsigned int numframes,
 				  const unsigned int *texcoords,
 				  GL_TEXTURE_TYPE_ENUM type,
@@ -58,14 +45,8 @@ int Cglfont::Load(glImage *_font_sprite,
 
 }
 
-/******************************************************************************
-
-	Prints a string
-
- ******************************************************************************/
-void Cglfont::Print(int x, int y, const char *text)
+void Font::Print(int x, int y, const char *text)
 {
-
 	unsigned char font_char;
 
 	while (*text)
@@ -74,30 +55,15 @@ void Cglfont::Print(int x, int y, const char *text)
 		glSprite(x, y, GL_FLIP_NONE, &font_sprite[font_char]);
 		x += font_sprite[font_char].width;
 	}
-
 }
 
-/******************************************************************************
-
-	Prints a number
-
- ******************************************************************************/
-void Cglfont::Print(int x, int y, int value)
+void Font::Print(int x, int y, int value)
 {
-
-
 	sprintf(str, "%i", value);
-
 	Print(x, y, str);
-
 }
 
-/******************************************************************************
-
-	Center Prints a string
-
- ******************************************************************************/
-void Cglfont::PrintCentered(int x, int y, const char *text)
+void Font::PrintCentered(int x, int y, const char *text)
 {
 
 	unsigned char font_char;
@@ -122,12 +88,7 @@ void Cglfont::PrintCentered(int x, int y, const char *text)
 
 }
 
-/******************************************************************************
-
-	Center Prints a number
-
- ******************************************************************************/
-void Cglfont::PrintCentered(int x, int y, int value)
+void Font::PrintCentered(int x, int y, int value)
 {
 	sprintf(str, "%i", value);
 	PrintCentered(x, y, str);
