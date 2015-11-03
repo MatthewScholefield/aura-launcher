@@ -38,8 +38,7 @@
 
 #define TEXT_WIDTH	((32-4)*8/6)
 
-static int bg2, bg3, iconTexID;
-static u16 *sprite;
+static int iconTexID;
 static tNDSBanner banner;
 
 static glImage icon[1];
@@ -75,17 +74,7 @@ static inline void writeRow(int rownum, const char* text) {
 
 	// clear right part
 	for (i = ((TEXT_WIDTH - len) / 2 + len); i < TEXT_WIDTH; i++)
-		writecharRS(rownum, i, 0);*/ }
-
-void iconTitleInit(int background2, int background3, u16 *setSprite)
-{
-	bg2 = background2;
-	bg3 = background3;
-	sprite = setSprite;
-
-	/*glGenTextures(1, &iconPalID);
-	glBindTexture(0, iconPalID);
-	glColorTableEXT(NULL, NULL, 0, NULL, NULL, NULL);*/
+		writecharRS(rownum, i, 0);*/
 }
 
 static void convertIconTilesToRaw(u8 *tilesSrc, u8 *tilesNew)
@@ -134,14 +123,14 @@ void drawIcon()
 	glSprite(ICON_POS_X, ICON_POS_Y, GL_FLIP_NONE, icon);
 }
 
-void iconTitleUpdate(int isdir, const char* name)
+void iconTitleUpdate(bool isDir, const char* name)
 {
 	writeRow(0, name);
 	writeRow(1, "");
 	writeRow(2, "");
 	writeRow(3, "");
 
-	if (isdir)
+	if (isDir)
 	{
 		// text
 		writeRow(2, "[directory]");
@@ -232,7 +221,7 @@ void iconTitleUpdate(int isdir, const char* name)
 	{
 		// this is an nds file!
 		FILE *fp;
-		unsigned int Icon_title_offset;
+		unsigned int iconTitleOffset;
 		int ret;
 
 		// open file for reading info
@@ -249,7 +238,7 @@ void iconTitleUpdate(int isdir, const char* name)
 
 		ret = fseek(fp, offsetof(tNDSHeader, bannerOffset), SEEK_SET);
 		if (ret == 0)
-			ret = fread(&Icon_title_offset, sizeof (int), 1, fp); // read if seek succeed
+			ret = fread(&iconTitleOffset, sizeof (int), 1, fp); // read if seek succeed
 		else
 			ret = 0; // if seek fails set to !=1
 
@@ -263,7 +252,7 @@ void iconTitleUpdate(int isdir, const char* name)
 			return;
 		}
 
-		if (Icon_title_offset == 0)
+		if (iconTitleOffset == 0)
 		{
 			// text
 			writeRow(2, "(no title/icon)");
@@ -273,7 +262,7 @@ void iconTitleUpdate(int isdir, const char* name)
 			return;
 		}
 
-		ret = fseek(fp, Icon_title_offset, SEEK_SET);
+		ret = fseek(fp, iconTitleOffset, SEEK_SET);
 		if (ret == 0)
 			ret = fread(&banner, sizeof (banner), 1, fp); // read if seek succeed
 		else
@@ -294,9 +283,8 @@ void iconTitleUpdate(int isdir, const char* name)
 
 		// turn unicode into ascii (kind of)
 		// and convert 0x0A into 0x00
-		int i;
-		char *p = (char*) banner.titles[0];
-		for (i = 0; i < sizeof (banner.titles[0]); i = i + 2)
+		unsigned char *p = (char*) banner.titles[0];
+		for (int i = 0; i < sizeof (banner.titles[0]); i += 2)
 		{
 			if ((p[i] == 0x0A) || (p[i] == 0xFF))
 				p[i / 2] = 0;
@@ -305,7 +293,7 @@ void iconTitleUpdate(int isdir, const char* name)
 		}
 
 		// text
-		for (i = 0; i < 3; ++i)
+		for (int i = 0; i < 3; ++i)
 		{
 			writeRow(i + 1, p);
 			p += strlen(p) + 1;

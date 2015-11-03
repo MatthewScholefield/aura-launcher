@@ -13,7 +13,7 @@
 #include <gl2d.h>
 #include "Font.h"
 
-int Font::Load(glImage *_font_sprite,
+int Font::load(glImage *_font_sprite,
 				  const unsigned int numframes,
 				  const unsigned int *texcoords,
 				  GL_TEXTURE_TYPE_ENUM type,
@@ -26,10 +26,10 @@ int Font::Load(glImage *_font_sprite,
 				  )
 
 {
-	font_sprite = _font_sprite;
+	fontSprite = _font_sprite;
 
 	int textureID =
-			glLoadSpriteSet(font_sprite,
+			glLoadSpriteSet(fontSprite,
 							numframes,
 							texcoords,
 							type,
@@ -45,25 +45,25 @@ int Font::Load(glImage *_font_sprite,
 
 }
 
-void Font::Print(int x, int y, const char *text)
+void Font::print(int x, int y, const char *text)
 {
 	unsigned char font_char;
 
 	while (*text)
 	{
 		font_char = (*(unsigned char*) text++) - 32;
-		glSprite(x, y, GL_FLIP_NONE, &font_sprite[font_char]);
-		x += font_sprite[font_char].width;
+		glSprite(x, y, GL_FLIP_NONE, &fontSprite[font_char]);
+		x += fontSprite[font_char].width;
 	}
 }
 
-void Font::Print(int x, int y, int value)
+void Font::print(int x, int y, int value)
 {
-	sprintf(str, "%i", value);
-	Print(x, y, str);
+	sprintf(buffer, "%i", value);
+	print(x, y, buffer);
 }
 
-void Font::PrintCentered(int x, int y, const char *text)
+void Font::printCentered(int x, int y, const char *text)
 {
 
 	unsigned char font_char;
@@ -73,7 +73,7 @@ void Font::PrintCentered(int x, int y, const char *text)
 	while (*text)
 	{
 		font_char = (*(unsigned char*) text++) - 32;
-		total_width += font_sprite[font_char].width;
+		total_width += fontSprite[font_char].width;
 	}
 
 	x = (SCREEN_WIDTH - total_width) / 2;
@@ -82,14 +82,14 @@ void Font::PrintCentered(int x, int y, const char *text)
 	while (*text)
 	{
 		font_char = (*(unsigned char*) text++) - 32;
-		glSprite(x, y, GL_FLIP_NONE, &font_sprite[font_char]);
-		x += font_sprite[font_char].width;
+		glSprite(x, y, GL_FLIP_NONE, &fontSprite[font_char]);
+		x += fontSprite[font_char].width;
 	}
 
 }
 
-void Font::PrintCentered(int x, int y, int value)
+void Font::printCentered(int x, int y, int value)
 {
-	sprintf(str, "%i", value);
-	PrintCentered(x, y, str);
+	sprintf(buffer, "%i", value);
+	printCentered(x, y, buffer);
 }

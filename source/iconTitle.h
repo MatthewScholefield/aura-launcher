@@ -20,6 +20,5 @@
 
 ------------------------------------------------------------------*/
 
-void iconTitleInit(int background2, int background3, u16 *setSprite);
-void iconTitleUpdate(int isdir, const char* name);
+void iconTitleUpdate(bool isDir, const char* name);
 void drawIcon();
