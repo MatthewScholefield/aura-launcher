@@ -137,31 +137,14 @@ void graphicsInit()
 	// Set up enough texture memory for our textures
 	// Bank A is just 128kb and we are using 194 kb of
 	// sprites
-	vramSetBankA(VRAM_A_TEXTURE);
+	//vramSetBankA(VRAM_A_TEXTURE);
 	vramSetBankB(VRAM_B_TEXTURE);
-
 	vramSetBankF(VRAM_F_TEX_PALETTE); // Allocate VRAM bank for all the palettes
 
-	vramSetBankE(VRAM_E_MAIN_BG); // Main bg text/8bit bg. Bank E size == 64kb, exactly enough for 8bit * 256 * 192 + text layer
-
-	////////////////////////////////////////////////////////////////
-
-	/*videoSetModeSub(MODE_5_2D | DISPLAY_BG_EXT_PALETTE);
-	vramSetBankC(VRAM_C_SUB_BG);
-	int subBgID = bgInitSub(2, BgType_ExRotation, BgSize_ER_512x512, 10, 2);
-	bgWrapOn(subBgID);
-	vramSetBankH(VRAM_H_LCD);
-	dmaCopy(sub_bgPal, VRAM_H_EXT_PALETTE[2][0], sub_bgPalLen);
-	vramSetBankH(VRAM_H_SUB_BG_EXT_PALETTE);
-	dmaCopy(sub_bgTiles, bgGetGfxPtr(subBgID), sub_bgTilesLen);
-
-	uint16 *bgptr = bgGetMapPtr(subBgID);
-	for (int i = 0; i < 32; ++i)
-		for (int j = 0; j < 24; ++j)
-			bgptr[i + j * 64] = i + j * 32;*/
+	//vramSetBankE(VRAM_E_MAIN_BG); // Main bg text/8bit bg. Bank E size == 64kb, exactly enough for 8bit * 256 * 192 + text layer
 }
 
-void fontInit()
+/*void fontInit()
 {
 	consoleDemoInit();
 	return;
@@ -179,4 +162,4 @@ void fontInit()
 	dmaCopy(&fontPal, VRAM_H_EXT_PALETTE[0][0], fontPalLen); //Copy the palette
 	vramSetBankH(VRAM_H_SUB_BG_EXT_PALETTE);
 	dmaCopy(&fontTiles, (uint16*) 0x0620400, fontTilesLen);
-}
+}*/

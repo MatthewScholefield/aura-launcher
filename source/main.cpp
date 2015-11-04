@@ -37,6 +37,7 @@
 #include "hbmenu_banner.h"
 
 #include "iconTitle.h"
+#include "graphics/fontHandler.h"
 
 using namespace std;
 
@@ -64,6 +65,7 @@ int main(int argc, char **argv) {
 	std::string filename;
 
 	graphicsInit();
+	fontInit();
 	/*while (1)
 	{
 		//swiWaitForVBlank();

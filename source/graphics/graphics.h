@@ -22,4 +22,3 @@
 void initSubSprites(void);
 void graphicsInit();
 void startRendering(bool top);
-void fontInit();

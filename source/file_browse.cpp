@@ -33,6 +33,8 @@
 #include <gl2d.h>
 
 #include "iconTitle.h"
+#include "graphics/fontHandler.h"
+#include "graphics/graphics.h"
 
 #define SCREEN_COLS 32
 #define ENTRIES_PER_SCREEN 20
@@ -158,50 +160,42 @@ void getDirectoryContents(vector<DirEntry>& dirContents)
 void showDirectoryContents(const vector<DirEntry>& dirContents, int startRow)
 {
 	char path[PATH_MAX];
-
+	const int FONT_SY = 10;
 
 	getcwd(path, PATH_MAX);
 
-	// Clear the screen
-	iprintf("\x1b[2J");
-	iprintf("\x1b[1;2H");
+	clearText(false);
 
 	// Print the path
 	if (strlen(path) < SCREEN_COLS)
 	{
-		iprintf("%s", path);
+		printLarge(false, 2 * FONT_SY, 1 * FONT_SY, path);
 	}
 	else
 	{
 		iprintf("%s", path + strlen(path) - SCREEN_COLS);
 	}
 
-	// Move to 2nd row
-	iprintf("\x1b[2;1H");
-	// Print line of dashes
-	iprintf("------------------------------ ");
-
 	// Print directory listing
 	for (int i = 0; i < ((int) dirContents.size() - startRow) && i < ENTRIES_PER_SCREEN; i++)
 	{
 		const DirEntry* entry = &dirContents.at(i + startRow);
 		char entryName[SCREEN_COLS + 1];
-
-		// Set row
-		iprintf("\x1b[%d;1H", i + ENTRIES_START_ROW);
+		char buffer[256];
 
 		if (entry->isDirectory)
 		{
 			strncpy(entryName, entry->name.c_str(), SCREEN_COLS);
 			entryName[SCREEN_COLS - 3] = '\0';
-			iprintf(" [%s]", entryName);
+			sprintf(buffer, " [%s]", entryName);
 		}
 		else
 		{
 			strncpy(entryName, entry->name.c_str(), SCREEN_COLS);
 			entryName[SCREEN_COLS - 1] = '\0';
-			iprintf(" %s", entryName);
+			sprintf(buffer, " %s", entryName);
 		}
+		printSmall(false, 1, FONT_SY * (i + ENTRIES_START_ROW), buffer);
 	}
 }
 
@@ -214,16 +208,17 @@ string browseForFile(const vector<string> extensionList)
 
 	getDirectoryContents(dirContents, extensionList);
 	showDirectoryContents(dirContents, screenOffset);
+	bool renderTop = true;
 
 	while (true)
 	{
-		// Clear old cursors
+		/*// Clear old cursors
 		for (int i = ENTRIES_START_ROW; i < ENTRIES_PER_SCREEN + ENTRIES_START_ROW; i++)
 		{
 			iprintf("\x1b[%d;1H ", i);
 		}
 		// Show cursor
-		iprintf("\x1b[%d;1H\x10", fileOffset - screenOffset + ENTRIES_START_ROW);
+		iprintf("\x1b[%d;1H\x10", fileOffset - screenOffset + ENTRIES_START_ROW);*/
 
 		iconTitleUpdate(dirContents.at(fileOffset).isDirectory, dirContents.at(fileOffset).name.c_str());
 
@@ -236,12 +231,18 @@ string browseForFile(const vector<string> extensionList)
 			while (REG_DISPCAPCNT & DCAP_ENABLE);
 			glBegin2D();
 			{
-				glBoxFilledGradient(0, 0, 255, 191, RGB15(25, 0, 0), RGB15(23, 20, 0), RGB15(25, 0, 0), RGB15(23, 20, 0));
-				drawIcon();
+				startRendering(renderTop);
+				if (renderTop)
+					glBoxFilledGradient(0, 0, 255, 191, RGB15(25, 0, 0), RGB15(23, 20, 0), RGB15(25, 0, 0), RGB15(23, 20, 0));
+				glColor(RGB15(31, 31, 31));
+				updateText(renderTop);
+				if (renderTop)
+					drawIcon();
 			}
 			glEnd2D();
 			glFlush(0);
 			swiWaitForVBlank();
+			renderTop = !renderTop;
 		}
 		while (!pressed);
 
