@@ -19,7 +19,26 @@ Many R4i knockoffs are also supported (Such as R4i SDHC and Gold) thanks to finc
 2. Copy the `_DS_MENU.DAT` and `R4.dat` files from that download to the root of the SD card
 3. Copy `Aura-Launcher.nds` to the root of the SD card and rename it to `_BOOT_DS.NDS`
 
- 
+# Build Instructions
+### Setup DevkitPro
+##### Windows
+- Download the latest exe devkitpro [installer from here][devkitPro]
+- Run the downloaded installer and check "devkitARM" in the custom install
+
+##### Linux
+- Download the latest perl script [installer (devkitARMupdate.pl) from here][devkitPro]
+- Navigate to the downloaded file and type "perl devkitARMupdate.pl"
+
+### Setup External Library (Easy GL2D DS)
+ - Download the [latest GL2D library][GL2D]
+ - Extract and merge into your devkitPro folder (In Windows, `C:\devkitPro\` and in Linux, `/opt/devkitPro`)
+
+### Compiling
+Download the source code to a directory and in a command prompt, type "make".
+Everything should compile successfully. Otherwise, don't hesitate to contact me.
+
 [hbmenu]:https://github.com/devkitPro/nds-hb-menu
 [fincs' blog page]:http://fincs.drunkencoders.com/2010/04/13/r4i-christmas-hbmenu-bootstub/
 [Top Screen]:https://cloud.githubusercontent.com/assets/5875019/8685470/6dcbc466-2a44-11e5-92af-256503349dbb.png
+[devkitPro]:http://sourceforge.net/projects/devkitpro/files/Automated%20Installer/
+[GL2D]:http://www.mediafire.com/download/4f8ne79hlci35bc/GL2D.zip
