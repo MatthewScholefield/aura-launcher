@@ -22,3 +22,4 @@
 void initSubSprites(void);
 void graphicsInit();
 void startRendering(bool top);
+bool isRenderingTop();

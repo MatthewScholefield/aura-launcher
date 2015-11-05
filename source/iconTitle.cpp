@@ -261,7 +261,6 @@ void iconTitleUpdate(bool isDir, const char* name)
 			fclose(fp);
 			return;
 		}
-
 		ret = fseek(fp, iconTitleOffset, SEEK_SET);
 		if (ret == 0)
 			ret = fread(&banner, sizeof (banner), 1, fp); // read if seek succeed

@@ -208,7 +208,6 @@ string browseForFile(const vector<string> extensionList)
 
 	getDirectoryContents(dirContents, extensionList);
 	showDirectoryContents(dirContents, screenOffset);
-	bool renderTop = true;
 
 	while (true)
 	{
@@ -228,21 +227,7 @@ string browseForFile(const vector<string> extensionList)
 			scanKeys();
 			pressed = keysDownRepeat();
 
-			while (REG_DISPCAPCNT & DCAP_ENABLE);
-			glBegin2D();
-			{
-				startRendering(renderTop);
-				if (renderTop)
-					glBoxFilledGradient(0, 0, 255, 191, RGB15(25, 0, 0), RGB15(23, 20, 0), RGB15(25, 0, 0), RGB15(23, 20, 0));
-				glColor(RGB15(31, 31, 31));
-				updateText(renderTop);
-				if (renderTop)
-					drawIcon();
-			}
-			glEnd2D();
-			glFlush(0);
 			swiWaitForVBlank();
-			renderTop = !renderTop;
 		}
 		while (!pressed);
 
