@@ -23,3 +23,8 @@ void initSubSprites(void);
 void graphicsInit();
 void startRendering(bool top);
 bool isRenderingTop();
+
+template<typename T> inline const T abs(T const & x)
+{
+	return ( x < 0) ? -x : x;
+}
