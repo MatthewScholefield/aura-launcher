@@ -37,7 +37,7 @@
 #include "graphics/graphics.h"
 
 #define SCREEN_COLS 32
-#define ENTRIES_PER_SCREEN 20
+#define ENTRIES_PER_SCREEN 15
 #define ENTRIES_START_ROW 3
 #define ENTRY_PAGE_LENGTH 10
 
