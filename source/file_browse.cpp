@@ -213,13 +213,6 @@ string browseForFile(const vector<string> extensionList)
 
 	while (true)
 	{
-		/*// Clear old cursors
-		for (int i = ENTRIES_START_ROW; i < ENTRIES_PER_SCREEN + ENTRIES_START_ROW; i++)
-		{
-			iprintf("\x1b[%d;1H ", i);
-		}
-		// Show cursor
-		iprintf("\x1b[%d;1H\x10", fileOffset - screenOffset + ENTRIES_START_ROW);*/
 		cursor->y = 3 + 10 * (fileOffset - screenOffset + ENTRIES_START_ROW);
 
 		iconTitleUpdate(dirContents.at(fileOffset).isDirectory, dirContents.at(fileOffset).name.c_str());

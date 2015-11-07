@@ -1,6 +1,24 @@
-#An 8 bit sprite
+# Set the warning/log level to 3
+-W3
+
+#bitmap mode
+-gb
+
+# Set the bit depth to 8 (256 colors)
 -gB8
-#A tiled image
--gt
+
 #The Transperant colour of 0xFF00FF
--gT FF00FF
+#-gT FF00FF
+
+##################
+# Old parameters
+#
+# An 8 bit sprite
+#-gB8
+#
+# A tiled image
+#-gt
+#
+# The Transperant colour of 0xFF00FF
+#-gT FF00FF
+################
