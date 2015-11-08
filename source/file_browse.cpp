@@ -180,7 +180,7 @@ void showDirectoryContents(const vector<DirEntry>& dirContents, int startRow)
 	for (int i = 0; i < ((int) dirContents.size() - startRow) && i < ENTRIES_PER_SCREEN; i++)
 	{
 		const DirEntry* entry = &dirContents.at(i + startRow);
-		char entryName[SCREEN_COLS + 1];
+		/*char entryName[SCREEN_COLS + 1];
 
 		if (entry->isDirectory)
 		{
@@ -191,7 +191,7 @@ void showDirectoryContents(const vector<DirEntry>& dirContents, int startRow)
 		{
 			strncpy(entryName, entry->name.c_str(), SCREEN_COLS);
 			entryName[SCREEN_COLS - 1] = '\0';
-		}
+		}*/
 		printSmall(false, 20, 3 + FONT_SY * (i + ENTRIES_START_ROW), entry->name.c_str());
 	}
 	animateTextIn(false);
@@ -207,13 +207,14 @@ string browseForFile(const vector<string> extensionList)
 	getDirectoryContents(dirContents, extensionList);
 	showDirectoryContents(dirContents, screenOffset);
 
-	printSmall(false, 8, 3 + 10 * (fileOffset - screenOffset + ENTRIES_START_ROW), ">");
+	printSmall(false, 12 - 16, 4 + 10 * (fileOffset - screenOffset + ENTRIES_START_ROW), ">");
 	TextEntry *cursor = getPreviousTextEntry(false);
-	cursor->delay = TextEntry::NO_FADE;
+	cursor->immune = true;
+	cursor->finalX += 16;
 
 	while (true)
 	{
-		cursor->y = 3 + 10 * (fileOffset - screenOffset + ENTRIES_START_ROW);
+		cursor->finalY = 4 + 10 * (fileOffset - screenOffset + ENTRIES_START_ROW);
 
 		iconTitleUpdate(dirContents.at(fileOffset).isDirectory, dirContents.at(fileOffset).name.c_str());
 
@@ -225,6 +226,11 @@ string browseForFile(const vector<string> extensionList)
 			swiWaitForVBlank();
 		}
 		while (!pressed);
+		if (cursor->fade)
+		{
+			cursor->fade = false;
+			cursor->invAccel = 4;
+		}
 
 		if (pressed & KEY_UP) fileOffset -= 1;
 		if (pressed & KEY_DOWN) fileOffset += 1;
@@ -239,15 +245,11 @@ string browseForFile(const vector<string> extensionList)
 		{
 			screenOffset = fileOffset;
 			showDirectoryContents(dirContents, screenOffset);
-			printSmall(false, 8, 8 * (fileOffset - screenOffset + ENTRIES_START_ROW), ">");
-			cursor = getPreviousTextEntry(false);
 		}
 		if (fileOffset > screenOffset + ENTRIES_PER_SCREEN - 1)
 		{
 			screenOffset = fileOffset - ENTRIES_PER_SCREEN + 1;
 			showDirectoryContents(dirContents, screenOffset);
-			printSmall(false, 8, 8 * (fileOffset - screenOffset + ENTRIES_START_ROW), ">");
-			cursor = getPreviousTextEntry(false);
 		}
 
 		if (pressed & KEY_A)

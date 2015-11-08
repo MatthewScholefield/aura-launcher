@@ -1,5 +1,5 @@
 #include <gl2d.h>
-#include <vector>
+#include <list>
 #include "Font.h"
 #include "fontHandler.h"
 
@@ -19,7 +19,7 @@ Font largeFont;
 glImage smallFontImages[FONT_SI_NUM_IMAGES];
 glImage largeFontImages[FONT_16X16_NUM_IMAGES];
 
-vector<TextEntry> topText, bottomText;
+list<TextEntry> topText, bottomText;
 
 void fontInit()
 {
@@ -51,7 +51,7 @@ void fontInit()
 				);
 }
 
-static vector<TextEntry> &getTextQueue(bool top)
+static list<TextEntry> &getTextQueue(bool top)
 {
 	return top ? topText : bottomText;
 }
@@ -70,22 +70,30 @@ void updateText(bool top)
 			glPolyFmt(POLY_ALPHA(0) | POLY_CULL_NONE | POLY_ID(1));
 			--i.delay;
 		}
-		else if (i.delay == 0 || i.delay == TextEntry::NO_FADE)
+		else //if (i.delay == TextEntry::ACTIVE)
 		{
-			i.x += (i.finalX * TextEntry::PRECISION - i.x) / 8;
-			if (i.delay == 0)
-				glPolyFmt(POLY_ALPHA((abs(i.x - i.initX * TextEntry::PRECISION)*31) / (TextEntry::PRECISION * abs(i.initX - i.finalX))) | POLY_CULL_NONE | POLY_ID(1));
+			i.x += (i.finalX * TextEntry::PRECISION - i.x) / i.invAccel;
+			i.y += (i.finalY * TextEntry::PRECISION - i.y) / i.invAccel;
+			glPolyFmt(POLY_ALPHA(!i.fade ? 31 : (abs(i.x - i.initX * TextEntry::PRECISION)*31) / (TextEntry::PRECISION * abs(i.initX - i.finalX))) | POLY_CULL_NONE | POLY_ID(1));
+			if (i.x / TextEntry::PRECISION == i.finalX)
+				i.delay = TextEntry::ACTIVE; //COMPLETE;
 		}
-		getFont(i.large).print(i.x / TextEntry::PRECISION, i.y, i.message);
+		//else
+		//	glPolyFmt(POLY_ALPHA(31) | POLY_CULL_NONE | POLY_ID(1));
+		getFont(i.large).print(i.x / TextEntry::PRECISION, i.y / TextEntry::PRECISION, i.message);
 	}
 }
 
 void clearText(bool top)
 {
-	if (top)
-		topText.clear();
-	else
-		bottomText.clear();
+	list<TextEntry> &text = getTextQueue(top);
+	for (auto it = text.begin(); it != text.end(); ++it)
+	{
+		if ((*it).immune)
+			continue;
+		it = text.erase(it);
+		--it;
+	}
 }
 
 void clearText()
@@ -112,10 +120,13 @@ TextEntry *getPreviousTextEntry(bool top)
 void animateTextIn(bool top)
 {
 	const int SLIDE_X = 16;
-	for (unsigned int i = 0; i < getTextQueue(top).size(); ++i)
+	int numElements = 0;
+	list<TextEntry> &text = getTextQueue(top);
+	for (auto it = text.begin(); it != text.end(); ++it)
 	{
-		TextEntry &entry = getTextQueue(top)[i];
-		entry.delay = i * 3;
-		entry.x = TextEntry::PRECISION * (entry.initX = entry.finalX - SLIDE_X);
+		if ((*it).immune)
+			continue;
+		(*it).delay = numElements++ * 2;
+		(*it).x = TextEntry::PRECISION * ((*it).initX = (*it).finalX - SLIDE_X);
 	}
 }

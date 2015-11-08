@@ -3,17 +3,22 @@
 class TextEntry
 {
 public:
+	static const int ACTIVE = 0;
 	static const int COMPLETE = -1;
-	static const int NO_FADE = -2;
 	static const int PRECISION = 10;
 
 	bool large;
+	bool immune; //Does not clear
+	bool fade;
 	int initX, initY, x, y, finalX, finalY;
+	int invAccel;
 	int delay;
 	const char *message;
 
 	TextEntry(bool large, int x, int y, const char *message)
-	: large(large), initX(x), initY(y), x(x), y(y), finalX(x), finalY(y), delay(COMPLETE), message(message) { }
+	: large(large), immune(false), fade(true), initX(x), initY(y)
+	, x(x*PRECISION), y(y*PRECISION), finalX(x), finalY(y)
+	, invAccel(6), delay(COMPLETE), message(message) { }
 };
 
 void fontInit();
