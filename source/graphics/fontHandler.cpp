@@ -74,7 +74,7 @@ void updateText(bool top)
 		{
 			i.x += (i.finalX * TextEntry::PRECISION - i.x) / i.invAccel;
 			i.y += (i.finalY * TextEntry::PRECISION - i.y) / i.invAccel;
-			glPolyFmt(POLY_ALPHA(!i.fade ? 31 : (abs(i.x - i.initX * TextEntry::PRECISION)*31) / (TextEntry::PRECISION * abs(i.initX - i.finalX))) | POLY_CULL_NONE | POLY_ID(1));
+			glPolyFmt(POLY_ALPHA((!i.fade || i.initX - i.finalX == 0) ? 31 : (abs(i.x - i.initX * TextEntry::PRECISION)*31) / (TextEntry::PRECISION * abs(i.initX - i.finalX))) | POLY_CULL_NONE | POLY_ID(1));
 			if (i.x / TextEntry::PRECISION == i.finalX)
 				i.delay = TextEntry::ACTIVE; //COMPLETE;
 		}

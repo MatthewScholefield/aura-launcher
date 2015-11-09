@@ -18,7 +18,7 @@ public:
 	TextEntry(bool large, int x, int y, const char *message)
 	: large(large), immune(false), fade(true), initX(x), initY(y)
 	, x(x*PRECISION), y(y*PRECISION), finalX(x), finalY(y)
-	, invAccel(6), delay(COMPLETE), message(message) { }
+	, invAccel(6), delay(1), message(message) { }
 };
 
 void fontInit();

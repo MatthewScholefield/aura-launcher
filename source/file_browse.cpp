@@ -35,6 +35,7 @@
 #include "iconTitle.h"
 #include "graphics/fontHandler.h"
 #include "graphics/graphics.h"
+#include "graphics/Font.h"
 
 #define SCREEN_COLS 32
 #define ENTRIES_PER_SCREEN 15
@@ -48,6 +49,9 @@ struct DirEntry
 	string name;
 	bool isDirectory;
 };
+
+TextEntry *pathText = nullptr;
+char *path = new char[PATH_MAX];
 
 bool nameEndsWith(const string& name, const vector<string> extensionList)
 {
@@ -157,29 +161,25 @@ void getDirectoryContents(vector<DirEntry>& dirContents)
 	getDirectoryContents(dirContents, extensionList);
 }
 
+void updatePath()
+{
+	getcwd(path, PATH_MAX);
+	if (pathText == nullptr)
+	{
+		printLarge(false, 2 * FONT_SX, 1 * FONT_SY, path);
+		pathText = getPreviousTextEntry(false);
+		pathText->y = 100;
+		pathText->immune = true;
+	}
+}
+
 void showDirectoryContents(const vector<DirEntry>& dirContents, int startRow)
 {
-	char path[PATH_MAX];
-	const int FONT_SY = 10;
-
-	getcwd(path, PATH_MAX);
-
 	clearText(false);
-
-	// Print the path
-	if (strlen(path) < SCREEN_COLS)
-	{
-		printLarge(false, 2 * FONT_SY, 1 * FONT_SY, path);
-	}
-	else
-	{
-		iprintf("%s", path + strlen(path) - SCREEN_COLS);
-	}
-
 	// Print directory listing
 	for (int i = 0; i < ((int) dirContents.size() - startRow) && i < ENTRIES_PER_SCREEN; i++)
 	{
-		const DirEntry* entry = &dirContents.at(i + startRow);
+		const DirEntry &entry = dirContents.at(i + startRow);
 		/*char entryName[SCREEN_COLS + 1];
 
 		if (entry->isDirectory)
@@ -192,9 +192,10 @@ void showDirectoryContents(const vector<DirEntry>& dirContents, int startRow)
 			strncpy(entryName, entry->name.c_str(), SCREEN_COLS);
 			entryName[SCREEN_COLS - 1] = '\0';
 		}*/
-		printSmall(false, 20, 3 + FONT_SY * (i + ENTRIES_START_ROW), entry->name.c_str());
+		printSmall(false, 20, 3 + FONT_SY * (i + ENTRIES_START_ROW), entry.name.c_str());
 	}
-	animateTextIn(false);
+	updatePath();
+	
 }
 
 string browseForFile(const vector<string> extensionList)
@@ -206,6 +207,7 @@ string browseForFile(const vector<string> extensionList)
 
 	getDirectoryContents(dirContents, extensionList);
 	showDirectoryContents(dirContents, screenOffset);
+	animateTextIn(false);
 
 	printSmall(false, 12 - 16, 4 + 10 * (fileOffset - screenOffset + ENTRIES_START_ROW), ">");
 	TextEntry *cursor = getPreviousTextEntry(false);
