@@ -246,12 +246,12 @@ string browseForFile(const vector<string> extensionList)
 		if (fileOffset < screenOffset)
 		{
 			screenOffset = fileOffset;
-			showDirectoryContents(dirContents, screenOffset);
+			animateTextVert(false, false);
 		}
 		if (fileOffset > screenOffset + ENTRIES_PER_SCREEN - 1)
 		{
 			screenOffset = fileOffset - ENTRIES_PER_SCREEN + 1;
-			showDirectoryContents(dirContents, screenOffset);
+			animateTextVert(false, true);
 		}
 
 		if (pressed & KEY_A)

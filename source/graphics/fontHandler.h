@@ -28,4 +28,5 @@ void clearText();
 void printSmall(bool top, int x, int y, const char *message);
 void printLarge(bool top, int x, int y, const char *message);
 void animateTextIn(bool top);
+void animateTextVert(bool top, bool up);
 TextEntry *getPreviousTextEntry(bool top);

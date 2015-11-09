@@ -130,3 +130,16 @@ void animateTextIn(bool top)
 		(*it).x = TextEntry::PRECISION * ((*it).initX = (*it).finalX - SLIDE_X);
 	}
 }
+
+void animateTextVert(bool top, bool up)
+{
+	list<TextEntry> &text = getTextQueue(top);
+	for (auto it = text.begin(); it != text.end(); ++it)
+	{
+		if ((*it).immune)
+			continue;
+		(*it).delay = TextEntry::ACTIVE;
+		(*it).finalY += FONT_SY * (up ? -1 : 1);
+		(*it).fade = false;
+	}
+}
