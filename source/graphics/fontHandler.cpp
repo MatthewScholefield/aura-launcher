@@ -1,5 +1,6 @@
 #include <gl2d.h>
 #include <list>
+#include <stdio.h>
 #include "Font.h"
 #include "fontHandler.h"
 
@@ -61,26 +62,49 @@ static Font &getFont(bool large)
 	return large ? largeFont : smallFont;
 }
 
+static int calcAlpha(const TextEntry &i)
+{
+	/*if (i.fade == TextEntry::FadeType::OUT)
+		return 0;*/
+	int routeLength = abs(i.initX - i.finalX) + abs(i.initY - i.finalY);
+	if (i.fade == TextEntry::FadeType::NONE || routeLength == 0)
+		return 31;
+
+	routeLength *= TextEntry::PRECISION;
+	int curDist = abs(i.x - i.finalX * TextEntry::PRECISION) + abs(i.y - i.finalY * TextEntry::PRECISION);
+	int alpha = (i.fade == TextEntry::FadeType::IN ? 31 : 0) - (31 * curDist) / routeLength;
+	alpha *= i.fade == TextEntry::FadeType::OUT ? -1 : 1;
+	return max(alpha, 0);
+}
+
 void updateText(bool top)
 {
-	for (auto &i : getTextQueue(top))
+	auto &text = getTextQueue(top);
+	for (auto it = text.begin(); it != text.end(); ++it)
 	{
-		if (i.delay > 0)
+		if (it->delay > 0)
 		{
 			glPolyFmt(POLY_ALPHA(0) | POLY_CULL_NONE | POLY_ID(1));
-			--i.delay;
+			--it->delay;
 		}
-		else //if (i.delay == TextEntry::ACTIVE)
+		else if (it->delay == TextEntry::ACTIVE)
 		{
-			i.x += (i.finalX * TextEntry::PRECISION - i.x) / i.invAccel;
-			i.y += (i.finalY * TextEntry::PRECISION - i.y) / i.invAccel;
-			glPolyFmt(POLY_ALPHA((!i.fade || i.initX - i.finalX == 0) ? 31 : (abs(i.x - i.initX * TextEntry::PRECISION)*31) / (TextEntry::PRECISION * abs(i.initX - i.finalX))) | POLY_CULL_NONE | POLY_ID(1));
-			if (i.x / TextEntry::PRECISION == i.finalX)
-				i.delay = TextEntry::ACTIVE; //COMPLETE;
+			it->x += (it->finalX * TextEntry::PRECISION - it->x) / it->invAccel;
+			it->y += (it->finalY * TextEntry::PRECISION - it->y) / it->invAccel;
+			int alpha = calcAlpha(*it);
+			if (alpha <= 2 && it->fade == TextEntry::FadeType::OUT)
+			{
+				it = text.erase(it);
+				--it;
+				continue;
+			}
+			glPolyFmt(POLY_ALPHA(alpha) | POLY_CULL_NONE | POLY_ID(1));
+			if (it->x / TextEntry::PRECISION == it->finalX)
+				it->delay = TextEntry::ACTIVE; //COMPLETE;
 		}
-		//else
-		//	glPolyFmt(POLY_ALPHA(31) | POLY_CULL_NONE | POLY_ID(1));
-		getFont(i.large).print(i.x / TextEntry::PRECISION, i.y / TextEntry::PRECISION, i.message);
+		else
+			glPolyFmt(POLY_ALPHA(31) | POLY_CULL_NONE | POLY_ID(1));
+		getFont(it->large).print(it->x / TextEntry::PRECISION, it->y / TextEntry::PRECISION, it->message);
 	}
 }
 
@@ -89,7 +113,7 @@ void clearText(bool top)
 	list<TextEntry> &text = getTextQueue(top);
 	for (auto it = text.begin(); it != text.end(); ++it)
 	{
-		if ((*it).immune)
+		if (it->immune)
 			continue;
 		it = text.erase(it);
 		--it;
@@ -124,22 +148,44 @@ void animateTextIn(bool top)
 	list<TextEntry> &text = getTextQueue(top);
 	for (auto it = text.begin(); it != text.end(); ++it)
 	{
-		if ((*it).immune)
+		if (it->immune)
 			continue;
-		(*it).delay = numElements++ * 2;
-		(*it).x = TextEntry::PRECISION * ((*it).initX = (*it).finalX - SLIDE_X);
+		it->delay = numElements++ * 2;
+		it->x = TextEntry::PRECISION * (it->initX = it->finalX - SLIDE_X);
+		it->fade = TextEntry::FadeType::IN;
 	}
 }
 
-void animateTextVert(bool top, bool up)
+void animateTextVert(bool top, bool up, TextEntry &newEntry)
 {
 	list<TextEntry> &text = getTextQueue(top);
+	int first = -1, last = 0, counter = -1;
 	for (auto it = text.begin(); it != text.end(); ++it)
 	{
-		if ((*it).immune)
+		if (first < 0)
+			--first;
+		++counter;
+		if (it->immune || it->fade == TextEntry::FadeType::OUT)
 			continue;
-		(*it).delay = TextEntry::ACTIVE;
-		(*it).finalY += FONT_SY * (up ? -1 : 1);
-		(*it).fade = false;
+		
+		if (first < 0)
+			first = -1 * first - 2;
+		last = counter;
+		it->delay = TextEntry::ACTIVE;
+		it->finalY += FONT_SY * (up ? -1 : 1);
+		it->fade = TextEntry::FadeType::NONE;
 	}
+
+	newEntry.delay = TextEntry::ACTIVE;
+	newEntry.finalY += FONT_SY * (up ? -1 : 1);
+	newEntry.fade = TextEntry::FadeType::IN;
+
+	auto it = next(text.begin(), up ? first : last);
+	it->fade = TextEntry::FadeType::OUT;
+	it->initX = it->x / TextEntry::PRECISION;
+	it->initY = it->y / TextEntry::PRECISION;
+	if (up)
+		text.push_back(newEntry);
+	else
+		text.push_front(newEntry);
 }

@@ -211,6 +211,7 @@ string browseForFile(const vector<string> extensionList)
 
 	printSmall(false, 12 - 16, 4 + 10 * (fileOffset - screenOffset + ENTRIES_START_ROW), ">");
 	TextEntry *cursor = getPreviousTextEntry(false);
+	cursor->fade = TextEntry::FadeType::IN;
 	cursor->immune = true;
 	cursor->finalX += 16;
 
@@ -228,9 +229,9 @@ string browseForFile(const vector<string> extensionList)
 			swiWaitForVBlank();
 		}
 		while (!pressed);
-		if (cursor->fade)
+		if (cursor->fade == TextEntry::FadeType::IN)
 		{
-			cursor->fade = false;
+			cursor->fade = TextEntry::FadeType::NONE;
 			cursor->invAccel = 4;
 		}
 
@@ -246,12 +247,14 @@ string browseForFile(const vector<string> extensionList)
 		if (fileOffset < screenOffset)
 		{
 			screenOffset = fileOffset;
-			animateTextVert(false, false);
+			TextEntry extra(false, 20, 3 + FONT_SY * (-1 + ENTRIES_START_ROW), dirContents.at(screenOffset).name.c_str());
+			animateTextVert(false, false, extra);
 		}
 		if (fileOffset > screenOffset + ENTRIES_PER_SCREEN - 1)
 		{
 			screenOffset = fileOffset - ENTRIES_PER_SCREEN + 1;
-			animateTextVert(false, true);
+			TextEntry extra(false, 20, 3 + FONT_SY * (ENTRIES_PER_SCREEN + ENTRIES_START_ROW), dirContents.at(screenOffset + ENTRIES_PER_SCREEN - 1).name.c_str());
+			animateTextVert(false, true, extra);
 		}
 
 		if (pressed & KEY_A)
