@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include "Font.h"
 #include "fontHandler.h"
+#include "TextEntry.h"
 
 // GRIT auto-genrated arrays of images
 #include "font_si.h"
@@ -11,6 +12,7 @@
 // Texture UV coords
 #include "uvcoord_font_si.h"
 #include "uvcoord_font_16x16.h"
+#include "TextPane.h"
 
 using namespace std;
 
@@ -21,6 +23,7 @@ glImage smallFontImages[FONT_SI_NUM_IMAGES];
 glImage largeFontImages[FONT_16X16_NUM_IMAGES];
 
 list<TextEntry> topText, bottomText;
+list<TextPane> panes;
 
 void fontInit()
 {
@@ -52,29 +55,20 @@ void fontInit()
 				);
 }
 
+TextPane &createTextPane(int startX, int startY, int shownElements)
+{
+	panes.emplace_back(startX, startY, shownElements);
+	return panes.back();
+}
+
 static list<TextEntry> &getTextQueue(bool top)
 {
 	return top ? topText : bottomText;
 }
 
-static Font &getFont(bool large)
+Font &getFont(bool large)
 {
 	return large ? largeFont : smallFont;
-}
-
-static int calcAlpha(const TextEntry &i)
-{
-	/*if (i.fade == TextEntry::FadeType::OUT)
-		return 0;*/
-	int routeLength = abs(i.initX - i.finalX) + abs(i.initY - i.finalY);
-	if (i.fade == TextEntry::FadeType::NONE || routeLength == 0)
-		return 31;
-
-	routeLength *= TextEntry::PRECISION;
-	int curDist = abs(i.x - i.finalX * TextEntry::PRECISION) + abs(i.y - i.finalY * TextEntry::PRECISION);
-	int alpha = (i.fade == TextEntry::FadeType::IN ? 31 : 0) - (31 * curDist) / routeLength;
-	alpha *= i.fade == TextEntry::FadeType::OUT ? -1 : 1;
-	return max(alpha, 0);
 }
 
 void updateText(bool top)
@@ -82,29 +76,23 @@ void updateText(bool top)
 	auto &text = getTextQueue(top);
 	for (auto it = text.begin(); it != text.end(); ++it)
 	{
-		if (it->delay > 0)
+		if (it->update())
 		{
-			glPolyFmt(POLY_ALPHA(0) | POLY_CULL_NONE | POLY_ID(1));
-			--it->delay;
+			it = text.erase(it);
+			--it;
+			continue;
 		}
-		else if (it->delay == TextEntry::ACTIVE)
-		{
-			it->x += (it->finalX * TextEntry::PRECISION - it->x) / it->invAccel;
-			it->y += (it->finalY * TextEntry::PRECISION - it->y) / it->invAccel;
-			int alpha = calcAlpha(*it);
-			if (alpha <= 2 && it->fade == TextEntry::FadeType::OUT)
-			{
-				it = text.erase(it);
-				--it;
-				continue;
-			}
-			glPolyFmt(POLY_ALPHA(alpha) | POLY_CULL_NONE | POLY_ID(1));
-			if (it->x / TextEntry::PRECISION == it->finalX)
-				it->delay = TextEntry::ACTIVE; //COMPLETE;
-		}
-		else
-			glPolyFmt(POLY_ALPHA(31) | POLY_CULL_NONE | POLY_ID(1));
+		glPolyFmt(POLY_ALPHA(it->calcAlpha()) | POLY_CULL_NONE | POLY_ID(1));
 		getFont(it->large).print(it->x / TextEntry::PRECISION, it->y / TextEntry::PRECISION, it->message);
+	}
+	for (auto it = panes.begin(); it != panes.end(); ++it)
+	{
+		if (it->update(top))
+		{
+			it = panes.erase(it);
+			--it;
+			continue;
+		}
 	}
 }
 
@@ -156,7 +144,7 @@ void animateTextIn(bool top)
 	}
 }
 
-void animateTextVert(bool top, bool up, TextEntry &newEntry)
+void scrollTextVert(bool top, bool up, TextEntry &newEntry)
 {
 	list<TextEntry> &text = getTextQueue(top);
 	int first = -1, last = 0, counter = -1;
@@ -167,7 +155,7 @@ void animateTextVert(bool top, bool up, TextEntry &newEntry)
 		++counter;
 		if (it->immune || it->fade == TextEntry::FadeType::OUT)
 			continue;
-		
+
 		if (first < 0)
 			first = -1 * first - 2;
 		last = counter;

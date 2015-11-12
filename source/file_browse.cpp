@@ -36,6 +36,7 @@
 #include "graphics/fontHandler.h"
 #include "graphics/graphics.h"
 #include "graphics/Font.h"
+#include "graphics/TextPane.h"
 
 #define SCREEN_COLS 32
 #define ENTRIES_PER_SCREEN 15
@@ -195,7 +196,7 @@ void showDirectoryContents(const vector<DirEntry>& dirContents, int startRow)
 		printSmall(false, 20, 3 + FONT_SY * (i + ENTRIES_START_ROW), entry.name.c_str());
 	}
 	updatePath();
-	
+
 }
 
 string browseForFile(const vector<string> extensionList)
@@ -206,8 +207,11 @@ string browseForFile(const vector<string> extensionList)
 	vector<DirEntry> dirContents;
 
 	getDirectoryContents(dirContents, extensionList);
-	showDirectoryContents(dirContents, screenOffset);
-	animateTextIn(false);
+	TextPane &pane = createTextPane(20, 3 + ENTRIES_START_ROW*FONT_SY, ENTRIES_PER_SCREEN);
+	for (auto &i : dirContents)
+		pane.addLine(i.name.c_str());
+	pane.createDefaultEntries();
+	pane.slideTransition(true);
 
 	printSmall(false, 12 - 16, 4 + 10 * (fileOffset - screenOffset + ENTRIES_START_ROW), ">");
 	TextEntry *cursor = getPreviousTextEntry(false);
@@ -247,14 +251,12 @@ string browseForFile(const vector<string> extensionList)
 		if (fileOffset < screenOffset)
 		{
 			screenOffset = fileOffset;
-			TextEntry extra(false, 20, 3 + FONT_SY * (-1 + ENTRIES_START_ROW), dirContents.at(screenOffset).name.c_str());
-			animateTextVert(false, false, extra);
+			pane.scroll(false);
 		}
 		if (fileOffset > screenOffset + ENTRIES_PER_SCREEN - 1)
 		{
 			screenOffset = fileOffset - ENTRIES_PER_SCREEN + 1;
-			TextEntry extra(false, 20, 3 + FONT_SY * (ENTRIES_PER_SCREEN + ENTRIES_START_ROW), dirContents.at(screenOffset + ENTRIES_PER_SCREEN - 1).name.c_str());
-			animateTextVert(false, true, extra);
+			pane.scroll(true);
 		}
 
 		if (pressed & KEY_A)
