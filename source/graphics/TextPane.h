@@ -19,7 +19,7 @@ class TextPane
 	int startIndex;
 	std::list<TextEntry> shownText;
 	std::vector<const char *> text;
-	void fadeUpTransition(bool up, bool fadeOut);
+	void wrapTransition();
 public:
 	void createDefaultEntries();
 	void slideTransition(bool transitionIn);

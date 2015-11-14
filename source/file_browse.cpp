@@ -244,16 +244,22 @@ string browseForFile(const vector<string> extensionList)
 		if (pressed & KEY_LEFT) fileOffset -= ENTRY_PAGE_LENGTH;
 		if (pressed & KEY_RIGHT) fileOffset += ENTRY_PAGE_LENGTH;
 
-		if (fileOffset < 0) fileOffset = dirContents.size() - 1; // Wrap around to bottom of list
-		if (fileOffset > ((int) dirContents.size() - 1)) fileOffset = 0; // Wrap around to top of list
-
-		// Scroll screen if needed
-		if (fileOffset < screenOffset)
+		if (fileOffset < 0)
+		{
+			screenOffset = fileOffset = dirContents.size() - 1; // Wrap around to bottom of list
+			pane.scroll(false);
+		}
+		else if (fileOffset > ((int) dirContents.size() - 1))
+		{
+			screenOffset = fileOffset = 0; // Wrap around to top of list;
+			pane.scroll(true);
+		}
+		else if (fileOffset < screenOffset)
 		{
 			screenOffset = fileOffset;
 			pane.scroll(false);
 		}
-		if (fileOffset > screenOffset + ENTRIES_PER_SCREEN - 1)
+		else if (fileOffset > screenOffset + ENTRIES_PER_SCREEN - 1)
 		{
 			screenOffset = fileOffset - ENTRIES_PER_SCREEN + 1;
 			pane.scroll(true);

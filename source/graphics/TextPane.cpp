@@ -15,6 +15,33 @@
 
 using namespace std;
 
+void TextPane::wrapTransition()
+{//Only call if text.size() is greater than SHOWN_ELEMENTS
+	bool atBottom = startIndex > 0;
+	const int SLIDE_Y = 16;
+	int numElements = 0;
+	for (auto it = shownText.begin(); it != shownText.end(); ++it)
+	{
+		if (it->fade == TextEntry::FadeType::OUT)
+			continue;
+		//it->delay = numElements++ * 2;
+		it->initX = it->x / TextEntry::PRECISION;
+		it->initY = it->y / TextEntry::PRECISION;
+		it->finalY = it->y / TextEntry::PRECISION + (atBottom ? 1 : -1) * SLIDE_Y; //START_PY + FONT_SY * numElements + (atBottom ? 1 : -1) * SLIDE_Y;
+		it->fade = TextEntry::FadeType::OUT;
+		++numElements;
+	}
+	numElements = 0;
+	for (int i = atBottom ? 0 : (text.size() - SHOWN_ELEMENTS); i < (atBottom ? SHOWN_ELEMENTS : (int) text.size()); ++i)
+	{
+		shownText.emplace_front(false, START_PX, START_PY + FONT_SY * ++numElements + (atBottom ? -1 : 1) * SLIDE_Y, text[i]);
+		TextEntry &entry = shownText.front();
+		entry.delay = 0;
+		entry.finalY += (atBottom ? 1 : -1) * SLIDE_Y;
+		entry.fade = TextEntry::FadeType::IN;
+	}
+}
+
 void TextPane::createDefaultEntries()
 {
 	for (int i = 0; i < min(SHOWN_ELEMENTS, (int) text.size()); ++i)
@@ -36,6 +63,12 @@ void TextPane::slideTransition(bool transitionIn)
 void TextPane::scroll(bool up)
 {
 	startIndex += up ? 1 : -1;
+	if (startIndex < 0 || startIndex + SHOWN_ELEMENTS > (int) text.size())
+	{
+		wrapTransition();
+		startIndex = up ? 0 : (text.size() - SHOWN_ELEMENTS);
+		return;
+	}
 	for (auto it = shownText.begin(); it != shownText.end(); ++it)
 	{
 		if (it->fade == TextEntry::FadeType::OUT)
