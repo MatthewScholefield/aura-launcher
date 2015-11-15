@@ -1,3 +1,23 @@
+/*-----------------------------------------------------------------
+ Copyright (C) 2015
+	Matthew Scholefield
+
+ This program is free software; you can redistribute it and/or
+ modify it under the terms of the GNU General Public License
+ as published by the Free Software Foundation; either version 2
+ of the License, or (at your option) any later version.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with this program; if not, write to the Free Software
+ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+
+------------------------------------------------------------------*/
+
 #include <gl2d.h>
 #include <list>
 #include <stdio.h>
@@ -127,53 +147,4 @@ void printLarge(bool top, int x, int y, const char *message)
 TextEntry *getPreviousTextEntry(bool top)
 {
 	return &getTextQueue(top).back();
-}
-
-void animateTextIn(bool top)
-{
-	const int SLIDE_X = 16;
-	int numElements = 0;
-	list<TextEntry> &text = getTextQueue(top);
-	for (auto it = text.begin(); it != text.end(); ++it)
-	{
-		if (it->immune)
-			continue;
-		it->delay = numElements++ * 2;
-		it->x = TextEntry::PRECISION * (it->initX = it->finalX - SLIDE_X);
-		it->fade = TextEntry::FadeType::IN;
-	}
-}
-
-void scrollTextVert(bool top, bool up, TextEntry &newEntry)
-{
-	list<TextEntry> &text = getTextQueue(top);
-	int first = -1, last = 0, counter = -1;
-	for (auto it = text.begin(); it != text.end(); ++it)
-	{
-		if (first < 0)
-			--first;
-		++counter;
-		if (it->immune || it->fade == TextEntry::FadeType::OUT)
-			continue;
-
-		if (first < 0)
-			first = -1 * first - 2;
-		last = counter;
-		it->delay = TextEntry::ACTIVE;
-		it->finalY += FONT_SY * (up ? -1 : 1);
-		it->fade = TextEntry::FadeType::NONE;
-	}
-
-	newEntry.delay = TextEntry::ACTIVE;
-	newEntry.finalY += FONT_SY * (up ? -1 : 1);
-	newEntry.fade = TextEntry::FadeType::IN;
-
-	auto it = next(text.begin(), up ? first : last);
-	it->fade = TextEntry::FadeType::OUT;
-	it->initX = it->x / TextEntry::PRECISION;
-	it->initY = it->y / TextEntry::PRECISION;
-	if (up)
-		text.push_back(newEntry);
-	else
-		text.push_front(newEntry);
 }

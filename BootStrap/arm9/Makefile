@@ -61,7 +61,7 @@ export DEPSDIR := $(CURDIR)/$(BUILD)
 export VPATH	:=	$(foreach dir,$(SOURCES),$(CURDIR)/$(dir)) \
 					$(foreach dir,$(DATA),$(CURDIR)/$(dir))
  
-CFILES		:=	bootstrap.c nds_loader_arm9.c
+CFILES		:=	bootstrap.c ndsLoaderArm9.c
 CPPFILES	:=
 PNGFILES	:=
 SFILES		:=

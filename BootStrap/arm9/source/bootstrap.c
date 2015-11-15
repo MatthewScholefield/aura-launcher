@@ -23,7 +23,7 @@
 
 #include <stdio.h>
 
-#include "nds_loader_arm9.h"
+#include "ndsLoaderArm9.h"
 
 int main( int argc, char **argv) {
 	consoleDemoInit();

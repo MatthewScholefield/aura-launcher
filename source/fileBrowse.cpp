@@ -20,7 +20,7 @@
 
 ------------------------------------------------------------------*/
 
-#include "file_browse.h"
+#include "fileBrowse.h"
 #include <vector>
 #include <algorithm>
 #include <unistd.h>
@@ -174,31 +174,6 @@ void updatePath()
 	}
 }
 
-void showDirectoryContents(const vector<DirEntry>& dirContents, int startRow)
-{
-	clearText(false);
-	// Print directory listing
-	for (int i = 0; i < ((int) dirContents.size() - startRow) && i < ENTRIES_PER_SCREEN; i++)
-	{
-		const DirEntry &entry = dirContents.at(i + startRow);
-		/*char entryName[SCREEN_COLS + 1];
-
-		if (entry->isDirectory)
-		{
-			strncpy(entryName, entry->name.c_str(), SCREEN_COLS);
-			entryName[SCREEN_COLS - 3] = '\0';
-		}
-		else
-		{
-			strncpy(entryName, entry->name.c_str(), SCREEN_COLS);
-			entryName[SCREEN_COLS - 1] = '\0';
-		}*/
-		printSmall(false, 20, 3 + FONT_SY * (i + ENTRIES_START_ROW), entry.name.c_str());
-	}
-	
-
-}
-
 string browseForFile(const vector<string> extensionList)
 {
 	int pressed = 0;
@@ -278,7 +253,7 @@ string browseForFile(const vector<string> extensionList)
 				getDirectoryContents(dirContents, extensionList);
 				screenOffset = 0;
 				fileOffset = 0;
-				showDirectoryContents(dirContents, screenOffset);
+				//TODO: update items
 			}
 			else
 			{
@@ -296,7 +271,7 @@ string browseForFile(const vector<string> extensionList)
 			getDirectoryContents(dirContents, extensionList);
 			screenOffset = 0;
 			fileOffset = 0;
-			showDirectoryContents(dirContents, screenOffset);
+			//TODO: update items
 		}
 	}
 }

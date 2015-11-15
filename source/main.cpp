@@ -31,8 +31,8 @@
 
 #include "graphics/graphics.h"
 
-#include "nds_loader_arm9.h"
-#include "file_browse.h"
+#include "ndsLoaderArm9.h"
+#include "fileBrowse.h"
 
 #include "hbmenu_banner.h"
 
