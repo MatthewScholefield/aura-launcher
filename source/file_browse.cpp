@@ -195,7 +195,7 @@ void showDirectoryContents(const vector<DirEntry>& dirContents, int startRow)
 		}*/
 		printSmall(false, 20, 3 + FONT_SY * (i + ENTRIES_START_ROW), entry.name.c_str());
 	}
-	updatePath();
+	
 
 }
 
@@ -207,6 +207,7 @@ string browseForFile(const vector<string> extensionList)
 	vector<DirEntry> dirContents;
 
 	getDirectoryContents(dirContents, extensionList);
+	updatePath();
 	TextPane &pane = createTextPane(20, 3 + ENTRIES_START_ROW*FONT_SY, ENTRIES_PER_SCREEN);
 	for (auto &i : dirContents)
 		pane.addLine(i.name.c_str());
