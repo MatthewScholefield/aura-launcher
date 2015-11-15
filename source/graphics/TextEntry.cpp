@@ -56,4 +56,4 @@ bool TextEntry::update()
 TextEntry::TextEntry(bool large, int x, int y, const char* message)
 : large(large), immune(false), fade(FadeType::NONE), initX(x), initY(y)
 , x(x*PRECISION), y(y*PRECISION), finalX(x), finalY(y)
-, invAccel(6), delay(1), message(message) { }
+, invAccel(6), delay(1), polyID(1), message(message) { }

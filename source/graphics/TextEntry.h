@@ -20,6 +20,7 @@ public:
 	int initX, initY, x, y, finalX, finalY;
 	int invAccel;
 	int delay;
+	int polyID;
 	const char *message;
 
 	int calcAlpha();

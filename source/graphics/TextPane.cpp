@@ -29,6 +29,7 @@ void TextPane::wrapTransition()
 		it->initY = it->y / TextEntry::PRECISION;
 		it->finalY = it->y / TextEntry::PRECISION + (atBottom ? 1 : -1) * SLIDE_Y; //START_PY + FONT_SY * numElements + (atBottom ? 1 : -1) * SLIDE_Y;
 		it->fade = TextEntry::FadeType::OUT;
+		it->polyID++;
 		++numElements;
 	}
 	numElements = 0;
@@ -118,7 +119,7 @@ bool TextPane::update(bool top)
 			--it;
 			continue;
 		}
-		glPolyFmt(POLY_ALPHA(it->calcAlpha()) | POLY_CULL_NONE | POLY_ID(1));
+		glPolyFmt(POLY_ALPHA(it->calcAlpha()) | POLY_CULL_NONE | POLY_ID(it->polyID));
 		getFont(it->large).print(it->x / TextEntry::PRECISION, it->y / TextEntry::PRECISION, it->message);
 	}
 	return shownText.size() == 0;
