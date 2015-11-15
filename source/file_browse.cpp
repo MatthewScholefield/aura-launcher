@@ -246,7 +246,8 @@ string browseForFile(const vector<string> extensionList)
 
 		if (fileOffset < 0)
 		{
-			screenOffset = fileOffset = dirContents.size() - 1; // Wrap around to bottom of list
+			fileOffset = dirContents.size() - 1;
+			screenOffset = fileOffset - ENTRIES_PER_SCREEN + 1; // Wrap around to bottom of list
 			pane.scroll(false);
 		}
 		else if (fileOffset > ((int) dirContents.size() - 1))

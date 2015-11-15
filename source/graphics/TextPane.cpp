@@ -34,8 +34,9 @@ void TextPane::wrapTransition()
 	numElements = 0;
 	for (int i = atBottom ? 0 : (text.size() - SHOWN_ELEMENTS); i < (atBottom ? SHOWN_ELEMENTS : (int) text.size()); ++i)
 	{
-		shownText.emplace_front(false, START_PX, START_PY + FONT_SY * ++numElements + (atBottom ? -1 : 1) * SLIDE_Y, text[i]);
-		TextEntry &entry = shownText.front();
+		int pY = START_PY + FONT_SY * numElements++ + (atBottom ? -1 : 1) * SLIDE_Y;
+		shownText.emplace_back(false, START_PX, pY, text[i]);
+		TextEntry &entry = shownText.back();
 		entry.delay = 0;
 		entry.finalY += (atBottom ? 1 : -1) * SLIDE_Y;
 		entry.fade = TextEntry::FadeType::IN;
