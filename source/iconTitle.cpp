@@ -26,8 +26,6 @@
 #include <ctype.h>
 #include <sys/stat.h>
 #include <gl2d.h>
-#include <string>
-#include <sstream>
 #include "graphics/fontHandler.h"
 
 #include "hbmenu_banner.h"
@@ -40,8 +38,6 @@
 #define ICON_POS_Y	80
 
 #define TEXT_WIDTH	((32-4)*8/6)
-
-using namespace std;
 
 static int iconTexID;
 static tNDSBanner banner;
