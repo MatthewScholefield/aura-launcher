@@ -26,6 +26,9 @@
 #include <ctype.h>
 #include <sys/stat.h>
 #include <gl2d.h>
+#include <string>
+#include <sstream>
+#include "graphics/fontHandler.h"
 
 #include "hbmenu_banner.h"
 #include "font6x8.h"
@@ -38,43 +41,16 @@
 
 #define TEXT_WIDTH	((32-4)*8/6)
 
+using namespace std;
+
 static int iconTexID;
 static tNDSBanner banner;
 
 static glImage icon[1];
 
-static inline void writecharRS(int row, int col, u16 car) {
-	/*// get map pointer
-	u16 *gfx = bgGetMapPtr(bg2);
-	// get old pair of values from VRAM
-	u16 oldval = gfx[row * (512 / 8 / 2)+(col / 2)];
-
-	// clear the half we will update
-	oldval &= (col % 2) ? 0x00FF : 0xFF00;
-	// apply the updated half
-	oldval |= (col % 2) ? (car << 8) : car;
-
-	// write back to VRAM
-	gfx[row * (512 / 8 / 2) + col / 2] = oldval;*/ }
-
-static inline void writeRow(int rownum, const char* text) {
-	/*int i, len, p = 0;
-	len = strlen(text);
-
-	if (len > TEXT_WIDTH)
-		len = TEXT_WIDTH;
-
-	// clear left part
-	for (i = 0; i < (TEXT_WIDTH - len) / 2; i++)
-		writecharRS(rownum, i, 0);
-
-	// write centered text
-	for (i = (TEXT_WIDTH - len) / 2; i < ((TEXT_WIDTH - len) / 2 + len); i++)
-		writecharRS(rownum, i, text[p++] - ' ');
-
-	// clear right part
-	for (i = ((TEXT_WIDTH - len) / 2 + len); i < TEXT_WIDTH; i++)
-		writecharRS(rownum, i, 0);*/
+static inline void writeRow(int rownum, const char* text)
+{
+	printSmall(true, SCREEN_WIDTH / 2 - (FONT_SX * strlen(text)) / 2, -2 + FONT_SY * (14 + rownum), text);
 }
 
 static void convertIconTilesToRaw(u8 *tilesSrc, u8 *tilesNew)
@@ -125,6 +101,7 @@ void drawIcon()
 
 void iconTitleUpdate(bool isDir, const char* name)
 {
+	clearText(true);
 	writeRow(0, name);
 	writeRow(1, "");
 	writeRow(2, "");
