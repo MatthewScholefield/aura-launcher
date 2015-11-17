@@ -33,9 +33,17 @@ public:
 		OUT
 	};
 
+	enum class AnimType
+	{
+		IN,
+		OUT
+	};
+
 	bool large;
 	bool immune; //Does not clear
+	bool delayShown;
 	FadeType fade;
+	AnimType anim;
 	int initX, initY, x, y, finalX, finalY;
 	int invAccel;
 	int delay;

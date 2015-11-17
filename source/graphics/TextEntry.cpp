@@ -28,7 +28,7 @@ int TextEntry::calcAlpha()
 	const int MAX_ALPHA = 31;
 
 	if (delay > 0)
-		return 0;
+		return delayShown ? MAX_ALPHA : 0;
 	else if (delay == TextEntry::ACTIVE && fade != FadeType::NONE)
 	{
 		int routeLength = abs(initX - finalX) + abs(initY - finalY);
@@ -54,19 +54,40 @@ bool TextEntry::update()
 		--delay;
 	else if (delay == TextEntry::ACTIVE)
 	{
-		int dX = (finalX * TextEntry::PRECISION - x) / invAccel;
-		int dY = (finalY * TextEntry::PRECISION - y) / invAccel;
+		int dX;
+		int dY;
+		if (anim == AnimType::IN)
+		{
+			dX = (finalX * TextEntry::PRECISION - x) / invAccel;
+			dY = (finalY * TextEntry::PRECISION - y) / invAccel;
+		}
+		else
+		{
+			int diffX = finalX * TextEntry::PRECISION - x;
+			int diffY = finalY * TextEntry::PRECISION - y;
+			dX = (diffX == 0 ? 0 : 1000 / (diffX));
+			dY = (diffY == 0 ? 0 : 1000 / (diffY));
+			if (abs(diffX) < abs(dX))
+				dX = 0;
+			if (abs(diffY) < abs(dY))
+				dY = 0;
+		}
 		x += dX;
 		y += dY;
-		if (fade == TextEntry::FadeType::OUT && (abs(dX) + abs(dY)) == 0)
-			return true;
-		/*if (x / TextEntry::PRECISION == finalX)
-			delay = TextEntry::COMPLETE;*/
+		if ((abs(dX) + abs(dY)) == 0)
+		{
+			if (fade == TextEntry::FadeType::OUT)
+				return true;
+			x = finalX * TextEntry::PRECISION;
+			y = finalY * TextEntry::PRECISION;
+			delay = TextEntry::COMPLETE;
+		}
 	}
 	return false;
 }
 
 TextEntry::TextEntry(bool large, int x, int y, const char* message)
-: large(large), immune(false), fade(FadeType::NONE), initX(x), initY(y)
+: large(large), immune(false), delayShown(false), fade(FadeType::NONE)
+, anim(AnimType::IN), initX(x), initY(y)
 , x(x*PRECISION), y(y*PRECISION), finalX(x), finalY(y)
 , invAccel(6), delay(1), polyID(1), message(message) { }

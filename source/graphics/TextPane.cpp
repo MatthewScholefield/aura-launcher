@@ -37,15 +37,13 @@ void TextPane::wrapTransition()
 	{
 		if (it->fade == TextEntry::FadeType::OUT)
 			continue;
-		//it->delay = numElements++ * 2;
+		it->delay = TextEntry::ACTIVE;
 		it->initX = it->x / TextEntry::PRECISION;
 		it->initY = it->y / TextEntry::PRECISION;
 		it->finalY = it->y / TextEntry::PRECISION + (atBottom ? 1 : -1) * SLIDE_Y; //START_PY + FONT_SY * numElements + (atBottom ? 1 : -1) * SLIDE_Y;
 		it->fade = TextEntry::FadeType::OUT;
 		it->polyID++;
-		++numElements;
 	}
-	numElements = 0;
 	for (int i = atBottom ? 0 : (text.size() - SHOWN_ELEMENTS); i < (atBottom ? SHOWN_ELEMENTS : (int) text.size()); ++i)
 	{
 		int pY = START_PY + FONT_SY * numElements++ + (atBottom ? -1 : 1) * SLIDE_Y;
@@ -63,15 +61,26 @@ void TextPane::createDefaultEntries()
 		shownText.emplace_back(false, START_PX, START_PY + FONT_SY * i, text[i]);
 }
 
-void TextPane::slideTransition(bool transitionIn)
+void TextPane::slideTransition(bool transitionIn, bool right, int delay)
 {
-	const int SLIDE_X = 16;
+	const int SLIDE_X = 16 * (right ? 1 : -1);
 	int numElements = 0;
 	for (auto it = shownText.begin(); it != shownText.end(); ++it)
 	{
-		it->delay = numElements++ * 2;
-		it->x = TextEntry::PRECISION * (it->initX = it->finalX - SLIDE_X);
-		it->fade = TextEntry::FadeType::IN;
+		it->delay = numElements++ * 2 + delay;
+		if (transitionIn)
+			it->x = TextEntry::PRECISION * (it->initX = it->finalX - SLIDE_X);
+		else
+		{
+			it->x = it->finalX * TextEntry::PRECISION;
+			it->y = it->finalY * TextEntry::PRECISION;
+			it->initX = it->finalX;
+			it->initY = it->finalY;
+			it->finalX += SLIDE_X;
+			it->delayShown = true;
+		}
+		it->fade = transitionIn ? TextEntry::FadeType::IN : TextEntry::FadeType::OUT;
+		it->anim = transitionIn ? TextEntry::AnimType::IN : TextEntry::AnimType::OUT;
 	}
 }
 

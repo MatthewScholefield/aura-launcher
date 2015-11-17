@@ -37,6 +37,7 @@
 #include "graphics/graphics.h"
 #include "graphics/Font.h"
 #include "graphics/TextPane.h"
+#include "SwitchState.h"
 
 #define SCREEN_COLS 32
 #define ENTRIES_PER_SCREEN 15
@@ -53,6 +54,26 @@ struct DirEntry
 
 TextEntry *pathText = nullptr;
 char *path = new char[PATH_MAX];
+
+#ifdef EMULATE_FILES
+#define chdir(a) chdirFake(a)
+void chdirFake(const char *dir)
+{
+	string pathStr(path);
+	string dirStr(dir);
+	if (dirStr == "..")
+	{
+		pathStr.resize(pathStr.find_last_of("/"));
+		pathStr.resize(pathStr.find_last_of("/") + 1);
+	}
+	else
+	{
+		pathStr += dirStr;
+		pathStr += "/";
+	}
+	strcpy(path, pathStr.c_str());
+}
+#endif
 
 bool nameEndsWith(const string& name, const vector<string> extensionList)
 {
@@ -179,27 +200,29 @@ string browseForFile(const vector<string> extensionList)
 	int pressed = 0;
 	int screenOffset = 0;
 	int fileOffset = 0;
-	vector<DirEntry> dirContents;
+	SwitchState scrn(3);
+	vector<DirEntry> dirContents[scrn.SIZE];
 
-	getDirectoryContents(dirContents, extensionList);
+	getDirectoryContents(dirContents[scrn], extensionList);
+	clearText(false);
 	updatePath();
-	TextPane &pane = createTextPane(20, 3 + ENTRIES_START_ROW*FONT_SY, ENTRIES_PER_SCREEN);
-	for (auto &i : dirContents)
-		pane.addLine(i.name.c_str());
-	pane.createDefaultEntries();
-	pane.slideTransition(true);
+	TextPane *pane = &createTextPane(20, 3 + ENTRIES_START_ROW*FONT_SY, ENTRIES_PER_SCREEN);
+	for (auto &i : dirContents[scrn])
+		pane->addLine(i.name.c_str());
+	pane->createDefaultEntries();
+	pane->slideTransition(true);
 
 	printSmall(false, 12 - 16, 4 + 10 * (fileOffset - screenOffset + ENTRIES_START_ROW), ">");
 	TextEntry *cursor = getPreviousTextEntry(false);
 	cursor->fade = TextEntry::FadeType::IN;
-	cursor->immune = true;
 	cursor->finalX += 16;
 
 	while (true)
 	{
 		cursor->finalY = 4 + 10 * (fileOffset - screenOffset + ENTRIES_START_ROW);
+		cursor->delay = TextEntry::ACTIVE;
 
-		iconTitleUpdate(dirContents.at(fileOffset).isDirectory, dirContents.at(fileOffset).name.c_str());
+		iconTitleUpdate(dirContents[scrn].at(fileOffset).isDirectory, dirContents[scrn].at(fileOffset).name.c_str());
 
 		// Power saving loop. Only poll the keys once per frame and sleep the CPU if there is nothing else to do
 		do
@@ -222,56 +245,64 @@ string browseForFile(const vector<string> extensionList)
 
 		if (fileOffset < 0)
 		{
-			fileOffset = dirContents.size() - 1;
+			fileOffset = dirContents[scrn].size() - 1;
 			screenOffset = fileOffset - ENTRIES_PER_SCREEN + 1; // Wrap around to bottom of list
-			pane.scroll(false);
+			pane->scroll(false);
 		}
-		else if (fileOffset > ((int) dirContents.size() - 1))
+		else if (fileOffset > ((int) dirContents[scrn].size() - 1))
 		{
 			screenOffset = fileOffset = 0; // Wrap around to top of list;
-			pane.scroll(true);
+			pane->scroll(true);
 		}
 		else if (fileOffset < screenOffset)
 		{
 			screenOffset = fileOffset;
-			pane.scroll(false);
+			pane->scroll(false);
 		}
 		else if (fileOffset > screenOffset + ENTRIES_PER_SCREEN - 1)
 		{
 			screenOffset = fileOffset - ENTRIES_PER_SCREEN + 1;
-			pane.scroll(true);
+			pane->scroll(true);
 		}
 
 		if (pressed & KEY_A)
 		{
-			DirEntry* entry = &dirContents.at(fileOffset);
+			DirEntry* entry = &dirContents[scrn].at(fileOffset);
 			if (entry->isDirectory)
 			{
-				iprintf("Entering directory\n");
 				// Enter selected directory
 				chdir(entry->name.c_str());
-				getDirectoryContents(dirContents, extensionList);
+				pane->slideTransition(false, false);
+				pane = &createTextPane(20, 3 + ENTRIES_START_ROW*FONT_SY, ENTRIES_PER_SCREEN);
+				getDirectoryContents(dirContents[++scrn], extensionList);
+				for (auto &i : dirContents[scrn])
+					pane->addLine(i.name.c_str());
+				pane->createDefaultEntries();
+				pane->slideTransition(true, false, 20);
 				screenOffset = 0;
 				fileOffset = 0;
-				//TODO: update items
 			}
 			else
 			{
-				// Clear the screen
-				iprintf("\x1b[2J");
+				//pane->slideTransition(true);
 				// Return the chosen file
 				return entry->name;
 			}
 		}
 
-		if (pressed & KEY_B)
+		if (pressed & KEY_B && strlen(path) > 1)
 		{
 			// Go up a directory
 			chdir("..");
-			getDirectoryContents(dirContents, extensionList);
+			pane->slideTransition(false, true);
+			pane = &createTextPane(20, 3 + ENTRIES_START_ROW*FONT_SY, ENTRIES_PER_SCREEN);
+			getDirectoryContents(dirContents[++scrn], extensionList);
+			for (auto &i : dirContents[scrn])
+				pane->addLine(i.name.c_str());
+			pane->createDefaultEntries();
+			pane->slideTransition(true, true, 20);
 			screenOffset = 0;
 			fileOffset = 0;
-			//TODO: update items
 		}
 	}
 }
