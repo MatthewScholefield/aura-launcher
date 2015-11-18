@@ -272,7 +272,7 @@ string browseForFile(const vector<string> extensionList)
 			{
 				// Enter selected directory
 				chdir(entry->name.c_str());
-				pane->slideTransition(false, false);
+				pane->slideTransition(false, false, 0, fileOffset - screenOffset);
 				pane = &createTextPane(20, 3 + ENTRIES_START_ROW*FONT_SY, ENTRIES_PER_SCREEN);
 				getDirectoryContents(dirContents[++scrn], extensionList);
 				for (auto &i : dirContents[scrn])

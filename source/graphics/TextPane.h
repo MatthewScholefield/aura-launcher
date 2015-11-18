@@ -35,7 +35,7 @@ class TextPane
 	void wrapTransition();
 public:
 	void createDefaultEntries();
-	void slideTransition(bool transitionIn, bool right = true, int delay = 0);
+	void slideTransition(bool transitionIn, bool right = true, int delay = 0, int clickedIndex = -1);
 	void scroll(bool up);
 	void addLine(const char *line);
 	bool update(bool top);
