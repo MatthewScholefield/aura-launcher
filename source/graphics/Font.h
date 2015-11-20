@@ -37,6 +37,7 @@ public:
 			);
 	void print(int x, int y, const char *text);
 	void print(int x, int y, int value);
-	void printCentered(int x, int y, const char *text);
-	void printCentered(int x, int y, int value);
+	int getCenteredX(const char *text);
+	void printCentered(int y, const char *text);
+	void printCentered(int y, int value);
 };

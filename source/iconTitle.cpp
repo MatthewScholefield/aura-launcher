@@ -46,7 +46,7 @@ static glImage icon[1];
 
 static inline void writeRow(int rownum, const char* text)
 {
-	printSmall(true, SCREEN_WIDTH / 2 - (FONT_SX * strlen(text)) / 2, -2 + FONT_SY * (14 + rownum), text);
+	printSmallCentered(true, -2 + FONT_SY * (14 + rownum), text);
 }
 
 static void convertIconTilesToRaw(u8 *tilesSrc, u8 *tilesNew)

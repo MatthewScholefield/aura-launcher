@@ -141,9 +141,19 @@ void printSmall(bool top, int x, int y, const char *message)
 	getTextQueue(top).emplace_back(false, x, y, message);
 }
 
+void printSmallCentered(bool top, int y, const char *message)
+{
+	getTextQueue(top).emplace_back(false, smallFont.getCenteredX(message), y, message);
+}
+
 void printLarge(bool top, int x, int y, const char *message)
 {
 	getTextQueue(top).emplace_back(true, x, y, message);
+}
+
+void printLargeCentered(bool top, int y, const char *message)
+{
+	getTextQueue(top).emplace_back(true, largeFont.getCenteredX(message), y, message);
 }
 
 TextEntry *getPreviousTextEntry(bool top)

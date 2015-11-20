@@ -63,33 +63,32 @@ void Font::print(int x, int y, int value)
 	print(x, y, buffer);
 }
 
-void Font::printCentered(int x, int y, const char *text)
+int Font::getCenteredX(const char *text)
 {
-
-	unsigned char font_char;
+	unsigned char fontChar;
 	int total_width = 0;
-	char *o_text = (char*) text;
-
 	while (*text)
 	{
-		font_char = (*(unsigned char*) text++) - 32;
-		total_width += fontSprite[font_char].width;
+		fontChar = (*(unsigned char*) text++) - 32;
+		total_width += fontSprite[fontChar].width;
 	}
-
-	x = (SCREEN_WIDTH - total_width) / 2;
-
-	text = o_text;
-	while (*text)
-	{
-		font_char = (*(unsigned char*) text++) - 32;
-		glSprite(x, y, GL_FLIP_NONE, &fontSprite[font_char]);
-		x += fontSprite[font_char].width;
-	}
-
+	return (SCREEN_WIDTH - total_width) / 2;
 }
 
-void Font::printCentered(int x, int y, int value)
+void Font::printCentered(int y, const char *text)
+{
+	unsigned char fontChar;
+	int x = getCenteredX(text);
+	while (*text)
+	{
+		fontChar = (*(unsigned char*) text++) - 32;
+		glSprite(x, y, GL_FLIP_NONE, &fontSprite[fontChar]);
+		x += fontSprite[fontChar].width;
+	}
+}
+
+void Font::printCentered(int y, int value)
 {
 	sprintf(buffer, "%i", value);
-	printCentered(x, y, buffer);
+	printCentered(y, buffer);
 }
