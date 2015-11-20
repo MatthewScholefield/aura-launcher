@@ -49,6 +49,7 @@ using namespace std;
 struct DirEntry
 {
 	string name;
+	string visibleName;
 	bool isDirectory;
 };
 
@@ -116,6 +117,7 @@ void getDirectoryContents(vector<DirEntry>& dirContents, const vector<string> ex
 
 	DirEntry first;
 	first.name = "AAA First";
+	first.visibleName = "[AAA First]";
 	first.isDirectory = true;
 	dirContents.push_back(first);
 
@@ -123,19 +125,19 @@ void getDirectoryContents(vector<DirEntry>& dirContents, const vector<string> ex
 	{
 		ostringstream fileName;
 		DirEntry dirEntry;
-		if ((dirEntry.isDirectory = (rand() % 2)))
-			fileName << "Directory ";
-		else
-			fileName << "File ";
 		for (int j = 0; j < rand() % 15 + 4; ++j)
 			fileName << (j % 2 == 0 ? consonants[rand() % consonants.size()]
 				: vowels[rand() % vowels.size()]);
-		string tmp = fileName.str();
-		dirEntry.name = tmp.c_str();
+		dirEntry.name = fileName.str();
+		if ((dirEntry.isDirectory = rand() % 2))
+			dirEntry.visibleName = "[" + dirEntry.name + "]";
+		else
+			dirEntry.visibleName = dirEntry.name;
 		dirContents.push_back(dirEntry);
 	}
 	DirEntry last;
 	last.name = "ZZZ Last";
+	last.visibleName = last.name;
 	last.isDirectory = false;
 	dirContents.push_back(last);
 
@@ -162,10 +164,14 @@ void getDirectoryContents(vector<DirEntry>& dirContents, const vector<string> ex
 			dirEntry.name = pent->d_name;
 			dirEntry.isDirectory = (st.st_mode & S_IFDIR) ? true : false;
 
+			if (dirEntry.isDirectory)
+				dirEntry.visibleName = "[" + dirEntry.name + "]";
+			else
+				dirEntry.visibleName = dirEntry.name;
+
+
 			if (dirEntry.name.compare(".") != 0 && (dirEntry.isDirectory || nameEndsWith(dirEntry.name, extensionList)))
-			{
 				dirContents.push_back(dirEntry);
-			}
 
 		}
 
@@ -208,7 +214,7 @@ string browseForFile(const vector<string> extensionList)
 	updatePath();
 	TextPane *pane = &createTextPane(20, 3 + ENTRIES_START_ROW*FONT_SY, ENTRIES_PER_SCREEN);
 	for (auto &i : dirContents[scrn])
-		pane->addLine(i.name.c_str());
+		pane->addLine(i.visibleName.c_str());
 	pane->createDefaultEntries();
 	pane->slideTransition(true);
 
@@ -276,7 +282,7 @@ string browseForFile(const vector<string> extensionList)
 				pane = &createTextPane(20, 3 + ENTRIES_START_ROW*FONT_SY, ENTRIES_PER_SCREEN);
 				getDirectoryContents(dirContents[++scrn], extensionList);
 				for (auto &i : dirContents[scrn])
-					pane->addLine(i.name.c_str());
+					pane->addLine(i.visibleName.c_str());
 				pane->createDefaultEntries();
 				pane->slideTransition(true, false, 20);
 				screenOffset = 0;
@@ -299,7 +305,7 @@ string browseForFile(const vector<string> extensionList)
 			pane = &createTextPane(20, 3 + ENTRIES_START_ROW*FONT_SY, ENTRIES_PER_SCREEN);
 			getDirectoryContents(dirContents[++scrn], extensionList);
 			for (auto &i : dirContents[scrn])
-				pane->addLine(i.name.c_str());
+				pane->addLine(i.visibleName.c_str());
 			pane->createDefaultEntries();
 			pane->slideTransition(true, true, 20);
 			screenOffset = 0;

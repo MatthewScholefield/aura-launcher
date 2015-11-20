@@ -91,9 +91,9 @@ extern const unsigned int font_si_texcoords[] = {
 	0, 56, 8, S_TEXT_SYS, // X
 	8, 56, 7, S_TEXT_SYS, // Y
 	16, 56, 8, S_TEXT_SYS, // Z
-	24, 56, 5, S_TEXT_SYS, // [
+	24, 56, 6, S_TEXT_SYS, // [
 	32, 56, 8, S_TEXT_SYS, // \ And,
-	40, 56, 5, S_TEXT_SYS, // ]
+	40, 56, 6, S_TEXT_SYS, // ]
 	48, 56, 5, S_TEXT_SYS, // ^
 	56, 56, 7, S_TEXT_SYS, // _
 	0, 64, 4, S_TEXT_SYS, // `
