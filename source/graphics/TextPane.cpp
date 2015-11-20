@@ -29,7 +29,9 @@
 using namespace std;
 
 void TextPane::wrapTransition()
-{//Only call if text.size() is greater than SHOWN_ELEMENTS
+{
+	if (text.size() <= SHOWN_ELEMENTS)
+		return;
 	bool atBottom = startIndex > 0;
 	const int SLIDE_Y = 16;
 	int numElements = 0;

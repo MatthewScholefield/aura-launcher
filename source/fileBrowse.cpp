@@ -119,7 +119,7 @@ void getDirectoryContents(vector<DirEntry>& dirContents, const vector<string> ex
 	first.isDirectory = true;
 	dirContents.push_back(first);
 
-	for (int i = 0; i < rand() % 30 + 25; ++i)
+	for (int i = 0; i < rand() % 10 + 5; ++i)
 	{
 		ostringstream fileName;
 		DirEntry dirEntry;
@@ -246,7 +246,7 @@ string browseForFile(const vector<string> extensionList)
 		if (fileOffset < 0)
 		{
 			fileOffset = dirContents[scrn].size() - 1;
-			screenOffset = fileOffset - ENTRIES_PER_SCREEN + 1; // Wrap around to bottom of list
+			screenOffset = max(0, fileOffset - ENTRIES_PER_SCREEN + 1); // Wrap around to bottom of list
 			pane->scroll(false);
 		}
 		else if (fileOffset > ((int) dirContents[scrn].size() - 1))
