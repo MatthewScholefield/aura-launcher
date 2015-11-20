@@ -37,3 +37,4 @@ void scrollTextVert(bool top, bool up, TextEntry &newEntry);
 TextEntry *getPreviousTextEntry(bool top);
 TextPane &createTextPane(int startX, int startY, int shownElements);
 Font &getFont(bool large);
+void waitForPanesToClear();

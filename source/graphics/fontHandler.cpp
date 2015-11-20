@@ -21,6 +21,7 @@
 #include <gl2d.h>
 #include <list>
 #include <stdio.h>
+#include <nds/interrupts.h>
 #include "Font.h"
 #include "fontHandler.h"
 #include "TextEntry.h"
@@ -159,4 +160,10 @@ void printLargeCentered(bool top, int y, const char *message)
 TextEntry *getPreviousTextEntry(bool top)
 {
 	return &getTextQueue(top).back();
+}
+
+void waitForPanesToClear()
+{
+	while (panes.size() > 0)
+		swiWaitForVBlank();
 }

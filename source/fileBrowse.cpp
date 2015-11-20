@@ -284,8 +284,9 @@ string browseForFile(const vector<string> extensionList)
 			}
 			else
 			{
-				//pane->slideTransition(true);
+				pane->slideTransition(false, true, 0, fileOffset - screenOffset);
 				// Return the chosen file
+				waitForPanesToClear();
 				return entry->name;
 			}
 		}

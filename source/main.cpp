@@ -105,7 +105,7 @@ int main(int argc, char **argv) {
 
 		////////////////////////////////////
 		// Launch the item
-		
+#ifndef EMULATE_FILES
 		// Construct a command line
 		getcwd (filePath, PATH_MAX);
 		pathLen = strlen (filePath);
@@ -159,7 +159,7 @@ int main(int argc, char **argv) {
 			scanKeys();
 			if (!(keysHeld() & KEY_A)) break;
 		}
-
+#endif
 	}
 
 	return 0;
