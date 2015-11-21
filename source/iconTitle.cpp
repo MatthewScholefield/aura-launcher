@@ -86,7 +86,8 @@ void loadIcon(u8 *tilesSrc, u16 *palSrc)//(u8(*tilesSrc)[(32 * 32) / 2], u16(*pa
 static void clearIcon(void)
 {
 	u8 clearTiles[(32 * 32) / 2] = {0};
-	u16 blackPalette[16] = {0};
+	u16 blackPalette[16]; // = {0};
+	std::fill(blackPalette, blackPalette + sizeof (blackPalette), 0);
 	loadIcon(clearTiles, blackPalette);
 }
 
@@ -99,9 +100,6 @@ void iconTitleUpdate(bool isDir, const char* name)
 {
 	clearText(true);
 	writeRow(0, name);
-	writeRow(1, "");
-	writeRow(2, "");
-	writeRow(3, "");
 
 	if (isDir)
 	{

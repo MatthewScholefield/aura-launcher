@@ -278,6 +278,7 @@ string browseForFile(const vector<string> extensionList)
 			{
 				// Enter selected directory
 				chdir(entry->name.c_str());
+				updatePath();
 				pane->slideTransition(false, false, 0, fileOffset - screenOffset);
 				pane = &createTextPane(20, 3 + ENTRIES_START_ROW*FONT_SY, ENTRIES_PER_SCREEN);
 				getDirectoryContents(dirContents[++scrn], extensionList);
@@ -297,10 +298,11 @@ string browseForFile(const vector<string> extensionList)
 			}
 		}
 
-		if (pressed & KEY_B && strlen(path) > 1)
+		if (pressed & KEY_B && strlen(path) > 2)
 		{
 			// Go up a directory
 			chdir("..");
+			updatePath();
 			pane->slideTransition(false, true);
 			pane = &createTextPane(20, 3 + ENTRIES_START_ROW*FONT_SY, ENTRIES_PER_SCREEN);
 			getDirectoryContents(dirContents[++scrn], extensionList);
