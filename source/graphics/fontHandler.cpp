@@ -103,10 +103,14 @@ void updateText(bool top)
 			--it;
 			continue;
 		}
-		glPolyFmt(POLY_ALPHA(it->calcAlpha()) | POLY_CULL_NONE | POLY_ID(1));
-		if (top)
-			glColor(RGB15(0, 0, 0));
-		getFont(it->large).print(it->x / TextEntry::PRECISION, it->y / TextEntry::PRECISION, it->message);
+		int alpha = it->calcAlpha();
+		if (alpha > 0)
+		{
+			glPolyFmt(POLY_ALPHA(alpha) | POLY_CULL_NONE | POLY_ID(1));
+			if (top)
+				glColor(RGB15(0, 0, 0));
+			getFont(it->large).print(it->x / TextEntry::PRECISION, it->y / TextEntry::PRECISION, it->message);
+		}
 	}
 	for (auto it = panes.begin(); it != panes.end(); ++it)
 	{

@@ -30,7 +30,7 @@ using namespace std;
 
 void TextPane::wrapTransition()
 {
-	if (text.size() <= SHOWN_ELEMENTS)
+	if (text.size() <= (unsigned int) SHOWN_ELEMENTS)
 		return;
 	bool atBottom = startIndex > 0;
 	const int SLIDE_Y = 16;
@@ -151,8 +151,12 @@ bool TextPane::update(bool top)
 			--it;
 			continue;
 		}
-		glPolyFmt(POLY_ALPHA(it->calcAlpha()) | POLY_CULL_NONE | POLY_ID(it->polyID));
-		getFont(it->large).print(it->x / TextEntry::PRECISION, it->y / TextEntry::PRECISION, it->message);
+		int alpha = it->calcAlpha();
+		if (alpha > 0)
+		{
+			glPolyFmt(POLY_ALPHA(alpha) | POLY_CULL_NONE | POLY_ID(it->polyID));
+			getFont(it->large).print(it->x / TextEntry::PRECISION, it->y / TextEntry::PRECISION, it->message);
+		}
 	}
 	return shownText.size() == 0;
 }
