@@ -103,9 +103,8 @@ void vBlankHandler()
 		if (renderingTop)
 		{
 			drawBG(mainBgImage);
-			//glBoxFilledGradient(0, 0, 255, 191, RGB15(25, 0, 0), RGB15(23, 20, 0), RGB15(25, 0, 0), RGB15(23, 20, 0));
-			updateText(renderingTop);
 			drawIcon();
+			updateText(renderingTop);
 		}
 		else
 		{
