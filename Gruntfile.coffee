@@ -32,22 +32,22 @@ module.exports = (grunt) ->
           src: "bootstrap.min.js"
           dest: "vendor/js/"
         }]
-      Materialize:
+      materialize:
         files: [{
           expand: true
-          cwd: "bower_components/Materialize/dist/css/"
+          cwd: "bower_components/materialize/dist/css/"
           src: "materialize.min.css"
           dest: "vendor/css/"
         },
         {
           expand: true
-          cwd: "bower_components/Materialize/dist/js/"
+          cwd: "bower_components/materialize/dist/js/"
           src: "materialize.min.js"
           dest: "vendor/js/"
         },
         {
           expand: true
-          cwd: "bower_components/Materialize/dist/font/"
+          cwd: "bower_components/materialize/dist/font/"
           src: "**/*"
           dest: "vendor/font/"
         }]
