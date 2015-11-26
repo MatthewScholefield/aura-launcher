@@ -1,5 +1,5 @@
 # About
-Aura Launcher is a modern NDS homebrew launcher based off of DevkitPro's hbmenu which can be used to replace the menu on several DS flashcards. Read more about the core of the launcher [on the hbmenu page][hbmenu].
+Aura Launcher is a modern NDS homebrew launcher focussing on aesthetics, based off of DevkitPro's hbmenu which can be used to replace the menu on several DS flashcards. Read more about the core of the launcher [on the hbmenu page][hbmenu].
 
 ![Screenshot][Top Screen]
 
