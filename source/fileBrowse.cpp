@@ -191,7 +191,15 @@ void getDirectoryContents(vector<DirEntry>& dirContents)
 
 void updatePath()
 {
+#ifndef EMULATE_FILES
 	getcwd(path, PATH_MAX);
+#else
+	if (strlen(path) < 1)
+	{
+		path[0] = '/';
+		path[1] = '\0';
+	}
+#endif
 	if (pathText == nullptr)
 	{
 		printLarge(false, 2 * FONT_SX, 1 * FONT_SY, path);

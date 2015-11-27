@@ -78,6 +78,8 @@ void fontInit()
 
 TextPane &createTextPane(int startX, int startY, int shownElements)
 {
+	if (panes.size() > 2)
+		panes.pop_front();
 	panes.emplace_back(startX, startY, shownElements);
 	return panes.back();
 }
