@@ -17,7 +17,8 @@
  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 ------------------------------------------------------------------*/
-#pragma once
+#ifndef TEXT_ENTRY_H
+#define TEXT_ENTRY_H
 
 class TextEntry
 {
@@ -55,3 +56,4 @@ public:
 
 	TextEntry(bool large, int x, int y, const char *message);
 };
+#endif

@@ -22,7 +22,8 @@
 #include "TextPane.h"
 #include "Font.h"
 
-#pragma once
+#ifndef FONT_HANDLER_H
+#define FONT_HANDLER_H
 
 void fontInit();
 void updateText(bool top);
@@ -38,3 +39,5 @@ TextEntry *getPreviousTextEntry(bool top);
 TextPane &createTextPane(int startX, int startY, int shownElements);
 Font &getFont(bool large);
 void waitForPanesToClear();
+
+#endif

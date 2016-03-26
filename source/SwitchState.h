@@ -4,7 +4,8 @@
  *
  * Created on November 16, 2015, 7:42 PM
  */
-#pragma once
+#ifndef SWITCH_STATE_H
+#define SWITCH_STATE_H
 
 class SwitchState
 {
@@ -41,3 +42,5 @@ public:
 
 	~SwitchState() { }
 };
+
+#endif

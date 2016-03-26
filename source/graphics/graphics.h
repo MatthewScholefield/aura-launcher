@@ -17,8 +17,8 @@
  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 ------------------------------------------------------------------*/
-#pragma once
-
+#ifndef GRAPHICS_H
+#define GRAPHICS_H
 void initSubSprites(void);
 void graphicsInit();
 void startRendering(bool top);
@@ -28,3 +28,4 @@ template<typename T> inline const T abs(T const & x)
 {
 	return ( x < 0) ? -x : x;
 }
+#endif

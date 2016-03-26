@@ -9,8 +9,9 @@
  ******************************************************************************/
 
 #include <gl2d.h>
+#ifndef FONT_H
+#define FONT_H
 
-#pragma once
 #define FONT_SX 8
 #define FONT_SY 10
 
@@ -41,3 +42,5 @@ public:
 	void printCentered(int y, const char *text);
 	void printCentered(int y, int value);
 };
+
+#endif
