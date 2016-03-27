@@ -20,7 +20,7 @@
 
 #include "TextEntry.h"
 #include "TextPane.h"
-#include "Font.h"
+#include "FontGraphic.h"
 
 #pragma once
 
@@ -36,5 +36,5 @@ void animateTextIn(bool top);
 void scrollTextVert(bool top, bool up, TextEntry &newEntry);
 TextEntry *getPreviousTextEntry(bool top);
 TextPane &createTextPane(int startX, int startY, int shownElements);
-Font &getFont(bool large);
+FontGraphic &getFont(bool large);
 void waitForPanesToClear();

@@ -17,14 +17,15 @@
  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 ------------------------------------------------------------------*/
+#ifndef TEXTPANE_H
+#define	TEXTPANE_H
 
 #include <list>
 #include <vector>
 #include <string>
 #include "TextEntry.h"
 
-#ifndef TEXTPANE_H
-#define	TEXTPANE_H
+
 
 class TextPane
 {
