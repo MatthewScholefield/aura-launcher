@@ -22,7 +22,7 @@
 #include <list>
 #include <stdio.h>
 #include <nds/interrupts.h>
-#include "Font.h"
+#include "FontGraphic.h"
 #include "fontHandler.h"
 #include "TextEntry.h"
 

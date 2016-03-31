@@ -44,6 +44,15 @@ static tNDSBanner banner;
 
 static glImage icon[1];
 
+u8 clearTiles[(32 * 32) / 2];
+u16 blackPalette[16];
+
+void iconTitleInit()
+{
+	std::fill(clearTiles, clearTiles + sizeof (clearTiles), 0);
+	std::fill(blackPalette, blackPalette + sizeof (blackPalette), 0);
+}
+
 static inline void writeRow(int rownum, const char* text)
 {
 	printSmallCentered(true, -2 + FONT_SY * (14 + rownum), text);
@@ -85,9 +94,6 @@ void loadIcon(u8 *tilesSrc, u16 *palSrc)//(u8(*tilesSrc)[(32 * 32) / 2], u16(*pa
 
 static void clearIcon(void)
 {
-	u8 clearTiles[(32 * 32) / 2] = {0};
-	u16 blackPalette[16]; // = {0};
-	std::fill(blackPalette, blackPalette + sizeof (blackPalette), 0);
 	loadIcon(clearTiles, blackPalette);
 }
 

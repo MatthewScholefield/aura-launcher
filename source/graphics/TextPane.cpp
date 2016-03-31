@@ -24,7 +24,7 @@
 #include <iterator>
 #include "TextPane.h"
 #include "fontHandler.h"
-#include "Font.h"
+#include "FontGraphic.h"
 
 using namespace std;
 
