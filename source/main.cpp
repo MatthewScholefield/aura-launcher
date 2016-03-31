@@ -60,8 +60,6 @@ int main(int argc, char **argv) {
 	*fake_heap_end = 0;
 
 	defaultExceptionHandler();
-
-	int pathLen;
 	std::string filename;
 
 	graphicsInit();
@@ -108,7 +106,7 @@ int main(int argc, char **argv) {
 #ifndef EMULATE_FILES
 		// Construct a command line
 		getcwd (filePath, PATH_MAX);
-		pathLen = strlen (filePath);
+		int pathLen = strlen(filePath);
 		vector<char*> argarray;
 
 		if ( strcasecmp (filename.c_str() + filename.size() - 5, ".argv") == 0) {

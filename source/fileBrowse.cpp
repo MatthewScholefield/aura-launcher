@@ -55,7 +55,6 @@ struct DirEntry
 
 TextEntry *pathText = nullptr;
 char *path = new char[PATH_MAX];
-int oldPathLen;
 
 #ifdef EMULATE_FILES
 #define chdir(a) chdirFake(a)
@@ -209,13 +208,20 @@ void updatePath()
 		pathText->fade = TextEntry::FadeType::NONE;
 		pathText->y = 100;
 		pathText->immune = true;
-		oldPathLen = calcLargeFontWidth(path);
 	}
 
-	int newPathLen = calcLargeFontWidth(path);
+	int pathWidth = calcLargeFontWidth(path);
 	pathText->delay = TextEntry::ACTIVE;
-	pathText->finalX = min(2 * FONT_SX, -(newPathLen + 2 * FONT_SX - 256));
-	oldPathLen = newPathLen;
+	pathText->finalX = min(2 * FONT_SX, -(pathWidth + 2 * FONT_SX - 256));
+}
+
+bool isTopLevel(const char *path)
+{
+#ifdef EMULATE_FILES
+	return strlen(path) <= strlen("/");
+#else
+	return strlen(path) <= strlen("fat: /");
+#endif
 }
 
 string browseForFile(const vector<string> extensionList)
@@ -315,7 +321,7 @@ string browseForFile(const vector<string> extensionList)
 			}
 		}
 
-		if (pressed & KEY_B && strlen(path) > 2)
+		if (pressed & KEY_B && !isTopLevel(path))
 		{
 			// Go up a directory
 			chdir("..");
