@@ -32,6 +32,8 @@ void printSmall(bool top, int x, int y, const char *message);
 void printSmallCentered(bool top, int y, const char *message);
 void printLarge(bool top, int x, int y, const char *message);
 void printLargeCentered(bool top, int y, const char *message);
+int calcSmallFontWidth(const char *text);
+int calcLargeFontWidth(const char *text);
 void animateTextIn(bool top);
 void scrollTextVert(bool top, bool up, TextEntry &newEntry);
 TextEntry *getPreviousTextEntry(bool top);

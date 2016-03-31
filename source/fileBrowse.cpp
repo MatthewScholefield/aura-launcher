@@ -55,6 +55,7 @@ struct DirEntry
 
 TextEntry *pathText = nullptr;
 char *path = new char[PATH_MAX];
+int oldPathLen;
 
 #ifdef EMULATE_FILES
 #define chdir(a) chdirFake(a)
@@ -204,9 +205,17 @@ void updatePath()
 	{
 		printLarge(false, 2 * FONT_SX, 1 * FONT_SY, path);
 		pathText = getPreviousTextEntry(false);
+		pathText->anim = TextEntry::AnimType::IN;
+		pathText->fade = TextEntry::FadeType::NONE;
 		pathText->y = 100;
 		pathText->immune = true;
+		oldPathLen = calcLargeFontWidth(path);
 	}
+
+	int newPathLen = calcLargeFontWidth(path);
+	pathText->delay = TextEntry::ACTIVE;
+	pathText->finalX = min(2 * FONT_SX, -(newPathLen + 2 * FONT_SX - 256));
+	oldPathLen = newPathLen;
 }
 
 string browseForFile(const vector<string> extensionList)

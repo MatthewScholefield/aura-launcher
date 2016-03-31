@@ -57,6 +57,19 @@ void FontGraphic::print(int x, int y, const char *text)
 	}
 }
 
+int FontGraphic::calcWidth(const char *text)
+{
+	unsigned char font_char;
+	int x = 0;
+
+	while (*text)
+	{
+		font_char = (*(unsigned char*) text++) - 32;
+		x += fontSprite[font_char].width;
+	}
+	return x;
+}
+
 void FontGraphic::print(int x, int y, int value)
 {
 	sprintf(buffer, "%i", value);

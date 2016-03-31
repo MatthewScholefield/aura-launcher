@@ -34,6 +34,7 @@ public:
 			const uint8 *texture
 			);
 	void print(int x, int y, const char *text);
+	int calcWidth(const char *text);
 	void print(int x, int y, int value);
 	int getCenteredX(const char *text);
 	void printCentered(int y, const char *text);

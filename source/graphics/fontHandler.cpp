@@ -163,6 +163,16 @@ void printLargeCentered(bool top, int y, const char *message)
 	getTextQueue(top).emplace_back(true, largeFont.getCenteredX(message), y, message);
 }
 
+int calcSmallFontWidth(const char *text)
+{
+	return smallFont.calcWidth(text);
+}
+
+int calcLargeFontWidth(const char *text)
+{
+	return largeFont.calcWidth(text);
+}
+
 TextEntry *getPreviousTextEntry(bool top)
 {
 	return &getTextQueue(top).back();
