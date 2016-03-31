@@ -27,9 +27,9 @@ int TextEntry::calcAlpha()
 {
 	const int MAX_ALPHA = 31;
 
-	if (delay > 0)
-		return delayShown ? MAX_ALPHA : 0;
-	else if (delay == TextEntry::ACTIVE && fade != FadeType::NONE)
+	if (delay > 0 && !delayShown)
+		return 0;
+	else if (delay != TextEntry::COMPLETE && fade != FadeType::NONE)
 	{
 		int routeLength = abs(initX - finalX) + abs(initY - finalY);
 		if (routeLength == 0)
@@ -50,7 +50,7 @@ int TextEntry::calcAlpha()
 
 bool TextEntry::update()
 {
-	if (delay > 0)
+	if (delay > TextEntry::ACTIVE)
 		--delay;
 	else if (delay == TextEntry::ACTIVE)
 	{
@@ -71,6 +71,10 @@ bool TextEntry::update()
 				dX = 0;
 			if (abs(diffY) < abs(dY))
 				dY = 0;
+			if (1 > abs(dX) && abs(diffX) > 0)
+				dX = diffX;
+			if (1 > abs(dY) && abs(diffY) > 0)
+				dY = diffY;
 		}
 		x += dX;
 		y += dY;
@@ -90,4 +94,4 @@ TextEntry::TextEntry(bool large, int x, int y, const char* message)
 : large(large), immune(false), delayShown(false), fade(FadeType::NONE)
 , anim(AnimType::IN), initX(x), initY(y)
 , x(x*PRECISION), y(y*PRECISION), finalX(x), finalY(y)
-, invAccel(6), delay(1), polyID(1), message(message) { }
+, invAccel(6), delay(TextEntry::COMPLETE), polyID(1), message(message) { }

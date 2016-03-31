@@ -77,20 +77,34 @@ void TextPane::slideTransition(bool transitionIn, bool right, int delay, int cli
 			it->x = TextEntry::PRECISION * (it->initX = it->finalX);
 			it->finalX += abs(SLIDE_X);
 			it->delay = TextEntry::ACTIVE;
+			it->delayShown = true;
 			continue;
 		}
 		if (transitionIn)
+		{
 			it->x = TextEntry::PRECISION * (it->initX = it->finalX - SLIDE_X);
+			it->delayShown = false;
+		}
 		else
 		{
-			it->x = it->finalX * TextEntry::PRECISION;
-			it->y = it->finalY * TextEntry::PRECISION;
-			it->initX = it->finalX;
-			it->initY = it->finalY;
-			it->finalX += SLIDE_X;
-			it->delayShown = true;
+			if (it->delay > TextEntry::ACTIVE)
+			{
+				it->finalX = it->x / TextEntry::PRECISION;
+				it->finalY = it->y / TextEntry::PRECISION;
+				it->delay = TextEntry::ACTIVE;
+				it->delayShown = false;
+			}
+			else
+			{
+				it->initX = it->x / TextEntry::PRECISION;
+				it->initY = it->y / TextEntry::PRECISION;
+				it->finalX = it->x / TextEntry::PRECISION + SLIDE_X;
+				it->finalY = it->y / TextEntry::PRECISION;
+				it->delayShown = true;
+			}
 		}
-		it->delay = numElements++ * 2 + delay;
+		if (it->delay == TextEntry::COMPLETE)
+			it->delay = numElements++ * 2 + delay;
 	}
 }
 
