@@ -20,5 +20,6 @@
 
 ------------------------------------------------------------------*/
 #pragma once
+void iconTitleInit();
 void iconTitleUpdate(bool isDir, const char* name);
 void drawIcon();

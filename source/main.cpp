@@ -64,6 +64,7 @@ int main(int argc, char **argv) {
 
 	graphicsInit();
 	fontInit();
+	iconTitleInit();
 	/*while (1)
 	{
 		//swiWaitForVBlank();

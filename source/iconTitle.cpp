@@ -44,13 +44,15 @@ static tNDSBanner banner;
 
 static glImage icon[1];
 
-u8 clearTiles[(32 * 32) / 2];
-u16 blackPalette[16];
+u8 *clearTiles;
+u16 *blackPalette;
+u8 *tilesModified;
 
 void iconTitleInit()
 {
-	std::fill(clearTiles, clearTiles + sizeof (clearTiles), 0);
-	std::fill(blackPalette, blackPalette + sizeof (blackPalette), 0);
+	clearTiles = new u8[(32 * 32) / 2]();
+	blackPalette = new u16[16]();
+	tilesModified = new u8[(32 * 32) / 2];
 }
 
 static inline void writeRow(int rownum, const char* text)
@@ -60,18 +62,22 @@ static inline void writeRow(int rownum, const char* text)
 
 static void convertIconTilesToRaw(u8 *tilesSrc, u8 *tilesNew)
 {
-	const int TILE_SIZE = 8;
+	const int PY = 32;
+	const int PX = 16;
+	const int TILE_SIZE_Y = 8;
+	const int TILE_SIZE_X = 4;
 	int index = 0;
-	for (int tileY = 0; tileY < 32 / TILE_SIZE; ++tileY)
-		for (int tileX = 0; tileX < 32 / TILE_SIZE; ++tileX)
-			for (int pY = 0; pY < TILE_SIZE; ++pY)
-				for (int pX = 0; pX < TILE_SIZE / 2; ++pX)//TILE_SIZE/2 since one u8 equals two pixels (4 bit depth)
-					tilesNew[pX + (tileX * TILE_SIZE) / 2 + (32 / 2) * (pY + tileY * TILE_SIZE)] = tilesSrc[index++];
+	for (int tileY = 0; tileY < PY / TILE_SIZE_Y; ++tileY)
+	{
+		for (int tileX = 0; tileX < PX / TILE_SIZE_X; ++tileX)
+			for (int pY = 0; pY < TILE_SIZE_Y; ++pY)
+				for (int pX = 0; pX < TILE_SIZE_X; ++pX)//TILE_SIZE/2 since one u8 equals two pixels (4 bit depth)
+					tilesNew[pX + tileX * TILE_SIZE_X + PX * (pY + tileY * TILE_SIZE_Y)] = tilesSrc[index++];
+	}
 }
 
 void loadIcon(u8 *tilesSrc, u16 *palSrc)//(u8(*tilesSrc)[(32 * 32) / 2], u16(*palSrc)[16])
 {
-	u8 *tilesModified = new u8[(32 * 32) / 2];
 	convertIconTilesToRaw(tilesSrc, tilesModified);
 
 	glDeleteTextures(1, &iconTexID);
@@ -89,7 +95,6 @@ void loadIcon(u8 *tilesSrc, u16 *palSrc)//(u8(*tilesSrc)[(32 * 32) / 2], u16(*pa
 						(u16*) palSrc, // Image palette
 						(u8*) tilesModified // Raw image data
 						);
-	delete[] tilesModified;
 }
 
 static void clearIcon(void)
