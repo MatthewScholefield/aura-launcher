@@ -37,8 +37,8 @@
 
 using namespace std;
 
-Font smallFont;
-Font largeFont;
+FontGraphic smallFont;
+FontGraphic largeFont;
 
 glImage smallFontImages[FONT_SI_NUM_IMAGES];
 glImage largeFontImages[FONT_16X16_NUM_IMAGES];
@@ -89,7 +89,7 @@ static list<TextEntry> &getTextQueue(bool top)
 	return top ? topText : bottomText;
 }
 
-Font &getFont(bool large)
+FontGraphic &getFont(bool large)
 {
 	return large ? largeFont : smallFont;
 }

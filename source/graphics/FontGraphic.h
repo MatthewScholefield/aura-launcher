@@ -7,14 +7,12 @@
 
  *******************************************************************************
  ******************************************************************************/
-
-#include <gl2d.h>
-
 #pragma once
+#include <gl2d.h>
 #define FONT_SX 8
 #define FONT_SY 10
 
-class Font
+class FontGraphic
 {
 private:
 	glImage *fontSprite;
@@ -23,7 +21,7 @@ private:
 	
 public:
 
-	Font() { };
+	FontGraphic() { };
 	int load(glImage *_font_sprite,
 			const unsigned int numframes,
 			const unsigned int *texcoords,

@@ -11,9 +11,9 @@
 #include <nds.h>
 #include <stdio.h>
 #include <gl2d.h>
-#include "Font.h"
+#include "FontGraphic.h"
 
-int Font::load(glImage *_font_sprite,
+int FontGraphic::load(glImage *_font_sprite,
 				  const unsigned int numframes,
 				  const unsigned int *texcoords,
 				  GL_TEXTURE_TYPE_ENUM type,
@@ -45,7 +45,7 @@ int Font::load(glImage *_font_sprite,
 
 }
 
-void Font::print(int x, int y, const char *text)
+void FontGraphic::print(int x, int y, const char *text)
 {
 	unsigned char font_char;
 
@@ -57,13 +57,13 @@ void Font::print(int x, int y, const char *text)
 	}
 }
 
-void Font::print(int x, int y, int value)
+void FontGraphic::print(int x, int y, int value)
 {
 	sprintf(buffer, "%i", value);
 	print(x, y, buffer);
 }
 
-int Font::getCenteredX(const char *text)
+int FontGraphic::getCenteredX(const char *text)
 {
 	unsigned char fontChar;
 	int total_width = 0;
@@ -75,7 +75,7 @@ int Font::getCenteredX(const char *text)
 	return (SCREEN_WIDTH - total_width) / 2;
 }
 
-void Font::printCentered(int y, const char *text)
+void FontGraphic::printCentered(int y, const char *text)
 {
 	unsigned char fontChar;
 	int x = getCenteredX(text);
@@ -87,7 +87,7 @@ void Font::printCentered(int y, const char *text)
 	}
 }
 
-void Font::printCentered(int y, int value)
+void FontGraphic::printCentered(int y, int value)
 {
 	sprintf(buffer, "%i", value);
 	printCentered(y, buffer);

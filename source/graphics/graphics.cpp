@@ -20,7 +20,7 @@
 
 #include <nds.h>
 #include <gl2d.h>
-#include "font.h"
+#include "FontGraphic.h"
 #include "sub_bg.h"
 
 #include "hbmenu_banner.h"
