@@ -39,6 +39,8 @@
 
 #define TEXT_WIDTH	((32-4)*8/6)
 
+#define BOX_PY 135
+
 static int iconTexID;
 static tNDSBanner banner;
 
@@ -57,7 +59,7 @@ void iconTitleInit()
 
 static inline void writeRow(int rownum, const char* text)
 {
-	printSmallCentered(true, -2 + FONT_SY * (14 + rownum), text);
+	printSmallCentered(true, BOX_PY + FONT_SY * rownum, text);
 }
 
 static void convertIconTilesToRaw(u8 *tilesSrc, u8 *tilesNew)
