@@ -2,8 +2,8 @@
 ### How to setup locally
 ##### Setup System
  - Install [npm][nodejs] (Included with nodejs)
- - Install Bower:
-`npm install -g bower`
+ - Install Bower and Grunt:
+`sudo npm install -g bower grunt-cli`
 
 ##### Initialize Dependencies
 ```
