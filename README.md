@@ -15,7 +15,7 @@ Currently the following cards are supported:
 
 Many R4i knockoffs are also supported (Such as R4i SDHC and Gold) thanks to fincs, but not included in the download. To use Aura Launcher with one of those cards:
 
-1. [Download fincs' bootstrap][fincs' blog page]
+1. [Download fincs' bootstrap][bootstrap-download] ([blog post here](https://web.archive.org/web/20170305023646/http://fincs.drunkencoders.com/2010/04/13/r4i-christmas-hbmenu-bootstub/))
 2. Copy the `_DS_MENU.DAT` and `R4.dat` files from that download to the root of the SD card
 3. Copy `Aura-Launcher.nds` to the root of the SD card and rename it to `_BOOT_DS.NDS`
 
@@ -38,7 +38,7 @@ Download the source code to a directory and in a command prompt, type "make".
 Everything should compile successfully. Otherwise, don't hesitate to contact me.
 
 [hbmenu]:https://github.com/devkitPro/nds-hb-menu
-[fincs' blog page]:http://fincs.drunkencoders.com/2010/04/13/r4i-christmas-hbmenu-bootstub/
+[bootstrap-download]:https://web.archive.org/web/20160416025144/http://fincs.drunkencoders.com/files/2010/04/r4i_christmas_hbmenu_bootstub_v1.0.zip
 [Top Screen]:https://cloud.githubusercontent.com/assets/5875019/8685470/6dcbc466-2a44-11e5-92af-256503349dbb.png
 [devkitPro]:http://sourceforge.net/projects/devkitpro/files/Automated%20Installer/
 [GL2D]:http://www.mediafire.com/download/4f8ne79hlci35bc/GL2D.zip
